@@ -5,7 +5,8 @@ module Rspec
   module Snapshot
     module Matchers
       def match_snapshot(formatter)
-        MatchSnapShot.new(self.class.metadata, formatter)
+        name = self.inspect.match(/"(.+)\"/)[1].gsub(" ", "_")
+        MatchSnapShot.new(self.class.metadata, name, formatter)
       end
     end
   end

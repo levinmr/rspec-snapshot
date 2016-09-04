@@ -4,15 +4,16 @@ module Rspec
   module Snapshot
     module Matchers
       class MatchSnapShot
-        def initialize(metadata, formatter)
+        def initialize(metadata, name, formatter)
           @metadata = metadata
+          @name = name
           @formatter = formatter
         end
 
         def matches?(actual)
           @actual_snap = actual_snap(actual)
           dir = File.dirname(@metadata[:absolute_file_path]) << "/__snapshots__"
-          filename = File.basename(@metadata[:file_path]) << ".snap"
+          filename = "#{@name}.snap"
           Dir.mkdir(dir) unless Dir.exist?(dir)
           snap_path = "#{dir}/#{filename}"
           if File.exist?(snap_path)
