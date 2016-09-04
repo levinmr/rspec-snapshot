@@ -1,6 +1,6 @@
 # Rspec::Snapshot
 
-Snapshot testing for you controllers, inspired by [jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
+Snapshot testing for your controllers, inspired by [jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
 
 
 ## Installation
