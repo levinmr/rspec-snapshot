@@ -1,15 +1,14 @@
 # Rspec::Snapshot
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rspec/snapshot`. To experiment with that code, run `bin/console` for an interactive prompt.
+Snapshot testing for you controllers, inspired by [jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rspec-snapshot'
+gem 'rspec-snapshot', require: "rspec/snapshot"
 ```
 
 And then execute:
@@ -22,7 +21,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+expect(response).to match_snapshot(:html) # use :json for the JSON response
+```
 
 ## Development
 
@@ -33,4 +34,3 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rspec-snapshot.
-
