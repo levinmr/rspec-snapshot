@@ -31,7 +31,7 @@ module Rspec
 
 
         def failure_message
-          "\nexpected: #{@expect_snap}\n     got: #{@actual_snap}\n\n(compared using ==)\n"
+          "\nexpected: #{@expect_snap}\n     got: #{@actual_snap}\n"
         end
 
         def actual_snap(actual)
