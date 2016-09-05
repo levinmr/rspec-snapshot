@@ -4,17 +4,16 @@ module RSpec
   module Snapshot
     module Matchers
       class MatchSnapShot
-        def initialize(metadata, name)
+        def initialize(metadata, snapshot_name)
           @metadata = metadata
-          @name = name
+          @snapshot_name = snapshot_name
         end
 
         def matches?(actual)
           @actual = actual
-          dir = File.dirname(@metadata[:file_path]) << "/__snapshots__"
-          filename = "#{@name}.snap"
-          Dir.mkdir(dir) unless Dir.exist?(dir)
-          snap_path = "#{dir}/#{filename}"
+          filename = "#{@snapshot_name}.snap"
+          snap_path = File.join(snapshot_dir, filename)
+          FileUtils.mkdir_p(File.dirname(snap_path)) unless Dir.exist?(File.dirname(snap_path))
           if File.exist?(snap_path)
             file = File.new(snap_path)
             @expect = file.read
@@ -32,6 +31,14 @@ module RSpec
 
         def failure_message
           "\nexpected: #{@expect_snap}\n     got: #{@actual_snap}\n"
+        end
+
+        def snapshot_dir
+          if RSpec.configuration.snapshot_dir.to_s == 'relative'
+            File.dirname(@metadata[:file_path]) << "/__snapshots__"
+          else
+            RSpec.configuration.snapshot_dir
+          end
         end
       end
     end

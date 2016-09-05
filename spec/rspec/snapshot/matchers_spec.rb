@@ -5,7 +5,7 @@ describe RSpec::Snapshot::Matchers do
   it "snapshot json" do
     json = JSON.pretty_generate({ a: 1, b: 2 })
 
-    expect(json).to match_snapshot()
+    expect(json).to match_snapshot("snapshot/json")
   end
 
   it "snapshot html" do
@@ -25,6 +25,6 @@ describe RSpec::Snapshot::Matchers do
     </html>
     HTML
 
-    expect(html).to match_snapshot()
+    expect(html).to match_snapshot("snapshot/html")
   end
 end
