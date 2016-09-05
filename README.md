@@ -37,7 +37,7 @@ describe TeamsController do
   describe "GET index" do
     it "returns a list of team" do
       get :index
-      expect(response.body).to match_snapshot('controllers/teams/index')
+      expect(response.body).to match_snapshot('teams/index')
     end
   end
 end
@@ -55,7 +55,7 @@ describe "widgets/index" do
 
     render
 
-    expect(rendered).to match_snapshot('views/widgets/index')
+    expect(rendered).to match_snapshot('widgets/index')
   end
 end
 ```
