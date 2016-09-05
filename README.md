@@ -1,7 +1,6 @@
 # Rspec::Snapshot
 
-Snapshot testing for your controllers, inspired by [jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
-
+Adding snapshot testing to rspec, inspired by [jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
 
 ## Installation
 
@@ -21,9 +20,37 @@ Or install it yourself as:
 
 ## Usage
 
+### Rails JSON API controller testing
+
 ```ruby
-expect(response).to match_snapshot(:html) # use :json for the JSON response
+describe TeamsController do
+  describe "GET index" do
+    it "returns a list of team" do
+      get :index
+      expect(response.body).to match_snapshot
+    end
+  end
+end
 ```
+
+### Rails view testing
+
+```ruby
+describe "widgets/index" do
+  it "displays all the widgets" do
+    assign(:widgets, [
+      Widget.create!(:name => "slicer"),
+      Widget.create!(:name => "dicer")
+    ])
+
+    render
+
+    expect(rendered).to match_snapshot
+  end
+end
+```
+
+Use your imagination for other usages!
 
 ## Development
 
