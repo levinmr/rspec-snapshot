@@ -11,7 +11,7 @@ module RSpec
 
         def matches?(actual)
           @actual = actual
-          dir = File.dirname(@metadata[:absolute_file_path]) << "/__snapshots__"
+          dir = File.dirname(@metadata[:file_path]) << "/__snapshots__"
           filename = "#{@name}.snap"
           Dir.mkdir(dir) unless Dir.exist?(dir)
           snap_path = "#{dir}/#{filename}"
@@ -21,6 +21,7 @@ module RSpec
             file.close
             @actual == @expect
           else
+            RSpec.configuration.reporter.message "Generate #{snap_path}"
             file = File.new(snap_path, "w+")
             file.write(@actual)
             file.close
