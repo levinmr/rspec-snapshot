@@ -7,7 +7,7 @@ Adding snapshot testing to rspec, inspired by [jest](http://facebook.github.io/j
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rspec-snapshot', require: "rspec/snapshot"
+gem 'rspec-snapshot'
 ```
 
 And then execute:
