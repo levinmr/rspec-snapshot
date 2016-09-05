@@ -5,12 +5,12 @@ require 'rspec/snapshot/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "rspec-snapshot"
-  spec.version       = Rspec::Snapshot::VERSION
+  spec.version       = RSpec::Snapshot::VERSION
   spec.authors       = ["Wei Zhu"]
   spec.email         = ["yesmeck@gmail.com"]
 
-  spec.summary       = %q{Rspec Snapshot Matcher}
-  spec.description   = %q{Snapshot you test}
+  spec.summary       = %q{RSpec Snapshot Matcher}
+  spec.description   = %q{Adding snapshot testing to RSpec}
   spec.homepage      = "https://github.com/yesmeck/rspec-snapshot"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

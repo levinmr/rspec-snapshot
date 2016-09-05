@@ -1,6 +1,6 @@
 require "fileutils"
 
-module Rspec
+module RSpec
   module Snapshot
     module Matchers
       class MatchSnapShot

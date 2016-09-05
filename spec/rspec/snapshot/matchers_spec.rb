@@ -1,7 +1,7 @@
 require "spec_helper"
 require 'active_support/core_ext/string'
 
-describe Rspec::Snapshot::Matchers do
+describe RSpec::Snapshot::Matchers do
   it "snapshot json" do
     json = JSON.pretty_generate({ a: 1, b: 2 })
 

@@ -2,7 +2,7 @@ require "rspec"
 require "json"
 require "rspec/snapshot/matchers/match_snapshot"
 
-module Rspec
+module RSpec
   module Snapshot
     module Matchers
       def match_snapshot
@@ -14,5 +14,5 @@ module Rspec
 end
 
 RSpec.configure do |config|
-  config.include Rspec::Snapshot::Matchers
+  config.include RSpec::Snapshot::Matchers
 end
