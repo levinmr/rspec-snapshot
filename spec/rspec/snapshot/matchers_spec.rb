@@ -3,9 +3,9 @@ require 'active_support/core_ext/string'
 
 describe Rspec::Snapshot::Matchers do
   it "snapshot json" do
-    json = JSON.generate({ a: 1, b: 2 })
+    json = JSON.pretty_generate({ a: 1, b: 2 })
 
-    expect(json).to match_snapshot(:json)
+    expect(json).to match_snapshot()
   end
 
   it "snapshot html" do
@@ -25,6 +25,6 @@ describe Rspec::Snapshot::Matchers do
     </html>
     HTML
 
-    expect(html).to match_snapshot(:html)
+    expect(html).to match_snapshot()
   end
 end
