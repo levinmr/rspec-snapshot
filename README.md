@@ -1,6 +1,6 @@
 # RSpec::Snapshot
 
-Adding snapshot testing to RSpec, inspired by [jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
+Adding snapshot testing to RSpec, inspired by [Jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
 
 ## Installation
 
