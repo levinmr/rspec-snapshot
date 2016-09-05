@@ -20,6 +20,16 @@ Or install it yourself as:
 
 ## Usage
 
+### Configration
+
+```ruby
+RSpec.configure do |config|
+  # The default setting is `:relative`, that means snapshots will be generate to
+  # the relative path of the spec file.
+  config.snapshot_dir = "spec/fixtures/snapshots"
+end
+```
+
 ### Rails JSON API controller testing
 
 ```ruby
