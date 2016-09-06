@@ -30,14 +30,15 @@ RSpec.configure do |config|
 end
 ```
 
-### Rails JSON API controller testing
+### Rails request testing
 
 ```ruby
-describe TeamsController do
-  describe "GET index" do
-    it "returns a list of team" do
-      get :index
-      expect(response.body).to match_snapshot('teams/index')
+RSpec.describe "Posts", type: :request do
+  describe "GET /posts" do
+    it "returns a list of post" do
+      get posts_path
+
+      expect(response.body).to match_snapshot("get_posts")
     end
   end
 end
@@ -46,7 +47,7 @@ end
 ### Rails view testing
 
 ```ruby
-describe "widgets/index" do
+RSpec.describe "widgets/index", type: :view do
   it "displays all the widgets" do
     assign(:widgets, [
       Widget.create!(:name => "slicer"),
@@ -55,7 +56,7 @@ describe "widgets/index" do
 
     render
 
-    expect(rendered).to match_snapshot('widgets/index')
+    expect(rendered).to match_snapshot("widgets/index")
   end
 end
 ```
