@@ -1,4 +1,3 @@
-require "json"
 require "rspec/snapshot/matchers/match_snapshot"
 
 module RSpec
