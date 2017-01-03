@@ -18,7 +18,6 @@ module RSpec
           if File.exist?(snap_path)
             file = File.new(snap_path)
             @expect = file.read
-            @expect = normalize_html(@expect) if @snapshot_name.include? 'html'
             file.close
             @actual == @expect
           else
