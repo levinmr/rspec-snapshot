@@ -17,6 +17,9 @@ module RSpec
           if File.exist?(snap_path)
             file = File.new(snap_path)
             @expect = file.read
+            if @snapshot_name.include? 'html'
+              normalize_html
+            end
             file.close
             @actual == @expect
           else
@@ -28,9 +31,20 @@ module RSpec
           end
         end
 
+        def actual
+          @actual
+        end
+
+        def expected
+          @expect
+        end
 
         def failure_message
-          "\nexpected: #{@expect_snap}\n     got: #{@actual_snap}\n"
+          "\nexpected #{expected_formatted}\n     got #{actual_formatted}\n"
+        end
+
+        def diffable?
+          true
         end
 
         def snapshot_dir
@@ -39,6 +53,24 @@ module RSpec
           else
             RSpec.configuration.snapshot_dir
           end
+        end
+
+        private
+
+        def actual_formatted
+          RSpec::Support::ObjectFormatter.format(expected)
+        end
+
+        def expected_formatted
+          RSpec::Support::ObjectFormatter.format(expected)
+        end
+
+        def normalize_html
+          require 'nokogiri'
+          @expect = Nokogiri::HTML(@expect, &:noblanks).to_xhtml(indent: 2)
+          @actual = Nokogiri::HTML(@actual, &:noblanks).to_xhtml(indent: 2)
+        rescue LoadError
+          puts 'Add nokogiri gem for improved HTML snapshot diffing.'
         end
       end
     end
