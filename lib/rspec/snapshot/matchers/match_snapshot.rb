@@ -58,7 +58,7 @@ module RSpec
         private
 
         def actual_formatted
-          RSpec::Support::ObjectFormatter.format(expected)
+          RSpec::Support::ObjectFormatter.format(actual)
         end
 
         def expected_formatted
