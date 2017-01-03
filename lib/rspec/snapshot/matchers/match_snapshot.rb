@@ -14,12 +14,11 @@ module RSpec
           filename = "#{@snapshot_name}.snap"
           snap_path = File.join(snapshot_dir, filename)
           FileUtils.mkdir_p(File.dirname(snap_path)) unless Dir.exist?(File.dirname(snap_path))
+          @actual = normalize_html(@actual) if @snapshot_name.include? 'html'
           if File.exist?(snap_path)
             file = File.new(snap_path)
             @expect = file.read
-            if @snapshot_name.include? 'html'
-              normalize_html
-            end
+            @expect = normalize_html(@expect) if @snapshot_name.include? 'html'
             file.close
             @actual == @expect
           else
@@ -65,12 +64,12 @@ module RSpec
           RSpec::Support::ObjectFormatter.format(expected)
         end
 
-        def normalize_html
+        def normalize_html(value)
           require 'nokogiri'
-          @expect = Nokogiri::HTML(@expect, &:noblanks).to_xhtml(indent: 2)
-          @actual = Nokogiri::HTML(@actual, &:noblanks).to_xhtml(indent: 2)
+          Nokogiri::HTML(value, &:noblanks).to_xhtml(indent: 2)
         rescue LoadError
           puts 'Add nokogiri gem for improved HTML snapshot diffing.'
+          value
         end
       end
     end
