@@ -30,7 +30,7 @@ module RSpec
 
 
         def failure_message
-          "\nexpected: #{@expect_snap}\n     got: #{@actual_snap}\n"
+          "\nexpected: #{@expect}\n     got: #{@actual}\n"
         end
 
         def snapshot_dir
