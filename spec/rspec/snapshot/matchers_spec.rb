@@ -29,6 +29,13 @@ describe RSpec::Snapshot::Matchers do
     expect(html).to match_snapshot("snapshot/html")
   end
 
+  context "when snapshotting non-string objects" do
+    it "stringifies simple POROs" do
+      simple_data_structure = { a_key: %w(some values) }
+      expect(simple_data_structure).to match_snapshot("snapshot/simple_data_structure")
+    end
+  end
+
   describe "html diffing" do
     shared_examples_for "a proper html diff missing h1 tag" do
       it "outputs a diff" do

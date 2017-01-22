@@ -19,7 +19,7 @@ module RSpec
             file = File.new(snap_path)
             @expect = file.read
             file.close
-            @actual == @expect
+            @actual.to_s == @expect
           else
             RSpec.configuration.reporter.message "Generate #{snap_path}"
             file = File.new(snap_path, "w+")
@@ -38,7 +38,7 @@ module RSpec
         end
 
         def failure_message
-          "\nexpected #{expected_formatted}\n     got #{actual_formatted}\n"
+          "\nexpected: #{expected_formatted}\n     got #{actual_formatted}\n"
         end
 
         def diffable?
