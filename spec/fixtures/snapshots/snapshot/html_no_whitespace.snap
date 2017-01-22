@@ -6,9 +6,7 @@
     <title></title>
   </head>
   <body>
-  <h1>rspec-snapshot</h1>
-  <p>
-    Snapshot is awesome!
-  </p>
-</body>
+    <h1>rspec-snapshot</h1>
+    <p>Snapshot is awesome!</p>
+  </body>
 </html>
