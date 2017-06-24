@@ -1,4 +1,5 @@
 require "fileutils"
+require "awesome_print"
 require "active_support/core_ext/string"
 
 module RSpec
@@ -11,7 +12,8 @@ module RSpec
         end
 
         def matches?(actual)
-          @actual = serializer.dump(actual)
+          @actual = serialize(actual)
+          p @actual
           filename = "#{@snapshot_name}.snap"
           snap_path = File.join(snapshot_dir, filename)
           FileUtils.mkdir_p(File.dirname(snap_path)) unless Dir.exist?(File.dirname(snap_path))
@@ -42,15 +44,15 @@ module RSpec
           end
         end
 
-        def serializer
-          serializer_name = RSpec.configuration.snapshot_serializer.to_s
-          begin
-            require "rspec/snapshot/serializers/#{serializer_name}"
-          rescue
+        def serialize(object)
+          serializer_name = RSpec.configuration.snapshot_serializer
+          if serializer_name.nil?
+            return object.ai(plain: true, indent: 2)
+          else
             require "rspec-snapshot-#{serializer_name}"
+            serializer_class = serializer_name.to_s.camelize.constantize
+            return serializer_class.new.dump(object)
           end
-          serializer_class = serializer_name.camelize.constantize
-          return serializer_class.new
         end
       end
     end

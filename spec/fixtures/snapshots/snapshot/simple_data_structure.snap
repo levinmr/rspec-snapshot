@@ -1,1 +1,6 @@
-{:a_key=>["some", "values"]}
+{
+  :a_key => [
+    [0] "some",
+    [1] "values"
+  ]
+}
