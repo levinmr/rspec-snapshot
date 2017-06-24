@@ -1,8 +1,6 @@
-# RSpec::Snapshot [![Build Status](https://travis-ci.org/yesmeck/rspec-snapshot.svg?branch=master)](https://travis-ci.org/yesmeck/rspec-snapshot)
+# RSpec::Snapshot [![Build Status](https://travis-ci.com/levinmr/rspec-snapshot.svg?branch=master)](https://travis-ci.com/levinmr/rspec-snapshot)
 
-**This project is looking for a new maintainer, drop me an email if you are interested.**
-
-Adding snapshot testing to RSpec, inspired by [Jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
+Adds snapshot testing to RSpec, inspired by [Jest](https://jestjs.io/).
 
 ## Installation
 
@@ -14,7 +12,7 @@ gem 'rspec-snapshot'
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -22,25 +20,35 @@ Or install it yourself as:
 
 ## Usage
 
-### Configration
+The gem provides `match_snapshot` and `snapshot` RSpec matchers which take
+a snapshot name as an argument like:
 
 ```ruby
-RSpec.configure do |config|
-  # The default setting is `:relative`, which means snapshots will be generate to
-  # the relative path of the spec file.
-  config.snapshot_dir = "spec/fixtures/snapshots"
-end
+# match_snapshot
+expect(generated_email).to match_snapshot('welcome_email')
+
+# match argument with snapshot
+expect(logger).to have_received(:info).with(snapshot('log message'))
 ```
+
+When a test is run using a snapshot matcher and a snapshot file does not exist
+matching the passed name, the test value encountered will be serialized and
+stored in your snapshot directory as the file: `#{snapshot_name}.snap`
+
+When a test is run using a snapshot matcher and a snapshot file exists matching
+the passed name, then the test value encountered will be serialized and
+compared to the snapshot file contents. If the values match your test passes,
+otherwise it fails.
 
 ### Rails request testing
 
 ```ruby
-RSpec.describe "Posts", type: :request do
-  describe "GET /posts" do
-    it "returns a list of post" do
+RSpec.describe 'Posts', type: :request do
+  describe 'GET /posts' do
+    it 'returns a list of post' do
       get posts_path
 
-      expect(response.body).to match_snapshot("get_posts")
+      expect(response.body).to match_snapshot('get_posts')
     end
   end
 end
@@ -49,28 +57,112 @@ end
 ### Rails view testing
 
 ```ruby
-RSpec.describe "widgets/index", type: :view do
-  it "displays all the widgets" do
+RSpec.describe 'widgets/index', type: :view do
+  it 'displays all the widgets' do
     assign(:widgets, [
-      Widget.create!(:name => "slicer"),
-      Widget.create!(:name => "dicer")
+      Widget.create!(:name => 'slicer'),
+      Widget.create!(:name => 'dicer')
     ])
 
     render
 
-    expect(rendered).to match_snapshot("widgets/index")
+    expect(rendered).to match_snapshot('widgets/index')
   end
 end
 ```
 
-Use your imagination for other usages!
+### UPDATE_SNAPSHOTS environment variable
+
+Occasionally you may want to regenerate all encountered snapshots for a set of
+tests. To do this, just set the UPDATE_SNAPSHOTS environment variable for your
+test command.
+
+Update all snapshots
+
+    $ UPDATE_SNAPSHOTS=true bundle exec rspec
+
+Update snapshots for some subset of tests
+
+    $ UPDATE_SNAPSHOTS=true bundle exec rspec spec/foo/bar
+
+## Configuration
+
+Global configurations for rspec-snapshot are optional. Details below:
+
+```ruby
+RSpec.configure do |config|
+  # The default setting is `:relative`, which means snapshot files will be
+  # created in a '__snapshots__' directory adjacent to the spec file where the
+  # matcher is used.
+  #
+  # Set this value to put all snapshots in a fixed directory
+  config.snapshot_dir = "spec/fixtures/snapshots"
+
+  # Defaults to using the awesome_print gem to serialize values for snapshots
+  #
+  # Set this value to use a custom snapshot serializer
+  config.snapshot_serializer = MyFavoriteSerializer
+end
+```
+
+### Custom serializers
+
+By default, values to be stored as snapshots are serialized to human readable
+string form using the [awesome_print](https://github.com/awesome-print/awesome_print) gem.
+
+You can pass custom serializers to `rspec-snapshot` if you prefer. Pass a serializer class name to the global RSpec config, or to an individual
+matcher as a config option:
+
+```ruby
+# Set a custom serializer for all tests
+RSpec.configure do |config|
+  config.snapshot_serializer = MyCoolGeneralSerializer
+end
+
+# Set a custom serializer for this specific test
+expect(html_response).to(
+  match_snapshot('html_response', { snapshot_serializer: MyAwesomeHTMLSerializer })
+)
+```
+
+Serializer classes are required to have one instance method `dump` which takes
+the value to be serialized and returns a string.
+
+## Migration
+
+If you're updating to version 2.x.x from 1.x.x, you may need to update all your existing snapshots since the serialization method has changed.
+
+    $ UPDATE_SNAPSHOTS=true bundle exec rspec
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### Initial Setup
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Install a current version of ruby (> 2.5) and bundler. Then install gems
+
+    $ bundle install
+
+### Linting
+
+    $ bundle exec rubocop
+
+### Unit tests
+
+    $ bundle exec rspec
+
+### Interactive console with the gem code loaded
+
+    $ bin/console
+
+### Rake commands
+
+To install this gem onto your local machine, run `bundle exec rake install`. To
+release a new version, update the version number in `version.rb`, and then run
+`bundle exec rake release`, which will create a git tag for the version, push
+git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/yesmeck/rspec-snapshot.
+Bug reports and pull requests are welcome on GitHub at https://github.com/levinmr/rspec-snapshot.
+
+A big thanks to the original author [@yesmeck](https://github.com/yesmeck).
