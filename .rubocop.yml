@@ -1,0 +1,89 @@
+require:
+  - rubocop-rspec
+
+AllCops:
+  NewCops: "enable"
+  Exclude:
+    - "Gemfile"
+    - "Rakefile"
+    - "bin/**/*"
+    - "spec/fixtures/**/*"
+  TargetRubyVersion: 2.5
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+Layout/LineLength:
+  Max: 80
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Lint:
+  Severity: error
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
+
+Metrics/BlockLength:
+  Exclude:
+    - "rspec-snapshot.gemspec"
+    - "spec/**/*"
+
+RSpec/AnyInstance:
+  Enabled: true
+RSpec/ContextWording:
+  Prefixes:
+    - when
+    - with
+    - without
+    - and
+RSpec/ExampleLength:
+  Enabled: true
+  Max: 10
+RSpec/ExpectInHook:
+  Enabled: true
+RSpec/FilePath:
+  Enabled: true
+RSpec/InstanceVariable:
+  Enabled: false
+RSpec/LeakyConstantDeclaration:
+  Enabled: true
+RSpec/LetSetup:
+  Enabled: true
+RSpec/MessageSpies:
+  Enabled: true
+RSpec/MultipleExpectations:
+  Enabled: true
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/NamedSubject:
+  Enabled: false # Disabled for preference
+RSpec/NestedGroups:
+  Max: 6
+RSpec/ScatteredSetup:
+  Enabled: true
+RSpec/SubjectStub:
+  Enabled: true
+RSpec/VerifiedDoubles:
+  Enabled: true
+
+Style/AccessModifierDeclarations:
+  Enabled: false # Disabled since we follow Clean Code's newspaper code structure
+Style/DoubleNegation:
+  Enabled: true
+Style/ExponentialNotation:
+  Enabled: true
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+Style/LineEndConcatenation:
+  Enabled: false
+Style/MultilineTernaryOperator:
+  Enabled: false # Disabled due to preference
+Style/SlicingWithRange:
+  Enabled: true
