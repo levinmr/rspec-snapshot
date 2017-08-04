@@ -12,4 +12,5 @@ end
 
 RSpec.configure do |config|
   config.include RSpec::Snapshot::Matchers
+  config.include RSpec::Snapshot::LoadSnapshot
 end

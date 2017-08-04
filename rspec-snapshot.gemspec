@@ -7,8 +7,8 @@ require 'rspec/snapshot/version'
 Gem::Specification.new do |spec|
   spec.name          = 'rspec-snapshot'
   spec.version       = RSpec::Snapshot::VERSION
-  spec.authors       = ['Wei Zhu']
-  spec.email         = ['yesmeck@gmail.com']
+  spec.authors       = ['Wei Zhu', 'Robert Cobb']
+  spec.email         = ['yesmeck@gmail.com', 'robcobb@finxpc.com']
 
   spec.summary       = 'RSpec Snapshot Matcher'
   spec.description   = 'Adding snapshot testing to RSpec'
