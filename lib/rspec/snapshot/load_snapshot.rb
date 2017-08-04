@@ -1,5 +1,3 @@
-require 'fileutils'
-
 module RSpec
   module Snapshot
     # Use these helpers to load a snapshot

@@ -1,9 +1,5 @@
 require 'fileutils'
-begin
-  require 'json/ext'
-rescue
-  require 'json'
-end
+require 'oj'
 
 module RSpec
   module Snapshot
@@ -20,22 +16,28 @@ module RSpec
         end
       end
 
-      # TODO: be more clever, allow more serializers
-      def self.serialize(value)
-        if value.is_a? String
-          value
-        elsif (value.is_a? Hash) || (value.is_a? Array)
-          JSON.pretty_generate(value)
+      def self.serialize(value, serializer: nil)
+        if serializer
+          serializer.dump(value)
         else
-          value
+          Oj.dump(value, quirks_mode: true, mode: :compat)
         end
       end
 
-      # TODO: any way to make this cleverer?
-      def self.deserialize(string_value)
-        JSON.parse(string_value)
+      def self.deserialize(string_value, serializer: nil)
+        if serializer
+          serializer.load(string_value)
+        else
+          Oj.load(string_value, quirks_mode: true, mode: :compat)
+        end
       rescue
         string_value
+      end
+
+      def self.compare(expected, actual, serializer: nil)
+        # serialize/deserialize actual value for matching
+        expected == deserialize(serialize(actual, serializer: serializer),
+                                serializer: serializer)
       end
 
       def self.snapshot_path(snapshot_name)

@@ -30,7 +30,7 @@ module RSpec
             @found = true
             # load_snapshot attempts to deserialize the way that write_snapshot serializes
             @expect = load_snapshot(snap_path)
-            pass = @actual == @expect
+            pass = compare
             if save_config == :all && !pass
               write_snapshot(snap_path, @actual)
             else
@@ -67,6 +67,11 @@ module RSpec
 
         private def snap_path
           Snapshot::Utils.snapshot_path(@snapshot_name)
+        end
+
+        # Todo: pass serializer
+        private def compare
+          Snapshot::Utils.compare(@expect, @actual)
         end
       end
     end
