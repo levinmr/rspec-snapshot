@@ -18,6 +18,7 @@ module RSpec
       #   * The save_snapshots option is set to 'none'.
       #   * There is a snapshot and the save_snapshots options is 'new'
       class MatchSnapShot
+        include Snapshot::LoadSnapshot
         def initialize(metadata, snapshot_name)
           @metadata = metadata
           @snapshot_name = snapshot_name
@@ -27,7 +28,7 @@ module RSpec
           @actual = actual
           if File.exist?(snap_path)
             @found = true
-            @expect = Snapshot::LoadSnapshot.load_snapshot(snap_path)
+            @expect = load_snapshot(snap_path)
             # TODO: clean up / serialize values for comparison and writing
             pass = @actual.to_s == @expect
             if save_config == :all && !pass
