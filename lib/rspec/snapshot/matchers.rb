@@ -1,4 +1,4 @@
-require "rspec/snapshot/matchers/match_snapshot"
+require 'rspec/snapshot/matchers/match_snapshot'
 
 module RSpec
   module Snapshot

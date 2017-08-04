@@ -1,4 +1,4 @@
-require "fileutils"
+require 'fileutils'
 
 module RSpec
   module Snapshot
@@ -11,7 +11,7 @@ module RSpec
 
         def matches?(actual)
           @actual = actual
-          filename = "#{@snapshot_name}.snap"
+          filename = "#{@snapshot_name}.#{snapshot_extension}"
           snap_path = File.join(snapshot_dir, filename)
           FileUtils.mkdir_p(File.dirname(snap_path)) unless Dir.exist?(File.dirname(snap_path))
           if File.exist?(snap_path)
@@ -21,13 +21,12 @@ module RSpec
             @actual.to_s == @expect
           else
             RSpec.configuration.reporter.message "Generate #{snap_path}"
-            file = File.new(snap_path, "w+")
+            file = File.new(snap_path, 'w+')
             file.write(@actual)
             file.close
             true
           end
         end
-
 
         def failure_message
           "\nexpected: #{@expect}\n     got: #{@actual}\n"
@@ -35,10 +34,14 @@ module RSpec
 
         def snapshot_dir
           if RSpec.configuration.snapshot_dir.to_s == 'relative'
-            File.dirname(@metadata[:file_path]) << "/__snapshots__"
+            File.dirname(@metadata[:file_path]) << '/__snapshots__'
           else
             RSpec.configuration.snapshot_dir
           end
+        end
+
+        def snapshot_extension
+          RSpec.configuration.snapshot_extension
         end
       end
     end
