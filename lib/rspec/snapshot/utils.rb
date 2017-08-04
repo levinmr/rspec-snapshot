@@ -5,6 +5,8 @@ module RSpec
     # Common utilities for snapshots
     # Most of the work is computing the right filename and interacting with the filesystem
     module Utils
+      class ConfigError < StandardError; end
+
       def self.write_snapshot(snap_path, serialized_value)
         RSpec.configuration.reporter.message "Writing snapshot at #{snap_path}"
         FileUtils.mkdir_p(File.dirname(snap_path)) unless Dir.exist?(File.dirname(snap_path))
@@ -14,7 +16,7 @@ module RSpec
       end
 
       def self.snapshot_path(snapshot_name)
-        filename = "#{snapshot_name}.#{snapshot_extension}"
+        filename = "#{normalize_filename(snapshot_name)}.#{snapshot_extension}"
         File.join(snapshot_dir, filename)
       end
 
@@ -27,14 +29,21 @@ module RSpec
       end
 
       def self.snapshot_extension
-        RSpec.configuration.snapshot_extension
+        @ext ||=
+          if normalize_file_ext(RSpec.configuration.snapshot_extension) != RSpec.configuration.snapshot_extension.to_s
+            raise ConfigError, "snapshot extension invalid: #{RSpec.configuration.snapshot_extension}"
+          else
+            RSpec.configuration.snapshot_extension
+          end
       end
 
-      # TODO: Better filename normalization,
-      # Should protect from weird capitalization and other bugs
-      def self.normalize_name(name)
-        raise ArgumentError 'Must pass a file name to match snapshot' unless name && !name.empty?
-        name
+      def self.normalize_filename(name)
+        raise ConfigError, 'Must pass a file name to match snapshot' unless name && !name.empty?
+        name.to_s.gsub(%r{[^\/\w]+}, ' ').downcase.strip.tr(' ', '_').gsub('//', '/')
+      end
+
+      def self.normalize_file_ext(ext)
+        normalize_filename(ext).delete('/')
       end
     end
   end
