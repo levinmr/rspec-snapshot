@@ -10,7 +10,7 @@ module RSpec
       end
 
       def load_snapshot(snap_path)
-        File.open(snap_path, 'r', &:read)
+        Snapshot::Utils.deserialize(File.open(snap_path, 'r', &:read))
       end
     end
   end

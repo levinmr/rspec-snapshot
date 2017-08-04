@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'json/ext'
 
 module RSpec
   module Snapshot
@@ -7,12 +8,27 @@ module RSpec
     module Utils
       class ConfigError < StandardError; end
 
-      def self.write_snapshot(snap_path, serialized_value)
+      def self.write_snapshot(snap_path, value)
         RSpec.configuration.reporter.message "Writing snapshot at #{snap_path}"
         FileUtils.mkdir_p(File.dirname(snap_path)) unless Dir.exist?(File.dirname(snap_path))
         File.open(snap_path, 'w+') do |file|
-          file.write(serialized_value)
+          file.write(serialize(value))
         end
+      end
+
+      def self.serialize(value)
+        if value.is_a? String
+          value
+        elsif value.is_a? Hash
+          value.to_json
+        end
+        value
+      end
+
+      def self.deserialize(string_value)
+        JSON.parse(string_value)
+      rescue
+        string_value
       end
 
       def self.snapshot_path(snapshot_name)
