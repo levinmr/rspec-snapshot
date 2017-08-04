@@ -21,8 +21,9 @@ module RSpec
           value
         elsif value.is_a? Hash
           value.to_json
+        else
+          value
         end
-        value
       end
 
       def self.deserialize(string_value)
