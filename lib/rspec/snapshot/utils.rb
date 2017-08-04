@@ -1,5 +1,9 @@
 require 'fileutils'
-require 'json/ext'
+begin
+  require 'json/ext'
+rescue
+  require 'json'
+end
 
 module RSpec
   module Snapshot
@@ -16,16 +20,18 @@ module RSpec
         end
       end
 
+      # TODO: be more clever, allow more serializers
       def self.serialize(value)
         if value.is_a? String
           value
-        elsif value.is_a? Hash
-          value.to_json
+        elsif (value.is_a? Hash) || (value.is_a? Array)
+          JSON.pretty_generate(value)
         else
           value
         end
       end
 
+      # TODO: any way to make this cleverer?
       def self.deserialize(string_value)
         JSON.parse(string_value)
       rescue

@@ -28,9 +28,9 @@ module RSpec
           @actual = actual
           if File.exist?(snap_path)
             @found = true
+            # load_snapshot attempts to deserialize the way that write_snapshot serializes
             @expect = load_snapshot(snap_path)
-            # TODO: clean up / serialize values for comparison and writing
-            pass = @actual.to_s == @expect
+            pass = @actual == @expect
             if save_config == :all && !pass
               write_snapshot(snap_path, @actual)
             else
