@@ -24,14 +24,12 @@ module RSpec
             file.close
 
             match = @actual.to_s == @expect
-
             if (@@diff_command_exists && !match)
               @expected_temp_file = create_tempfile_with(@expect)
               @actual_temp_file = create_tempfile_with(@actual)
             end
 
             match
-
           else
             RSpec.configuration.reporter.message "Generate #{snap_path}"
             file = File.new(snap_path, "w+")
