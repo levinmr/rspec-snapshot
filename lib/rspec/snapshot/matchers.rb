@@ -1,4 +1,4 @@
-require "rspec/snapshot/matchers/match_snapshot"
+require 'rspec/snapshot/matchers/match_snapshot'
 
 module RSpec
   module Snapshot
@@ -12,4 +12,5 @@ end
 
 RSpec.configure do |config|
   config.include RSpec::Snapshot::Matchers
+  config.include RSpec::Snapshot::LoadSnapshot
 end
