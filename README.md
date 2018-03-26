@@ -20,6 +20,22 @@ Or install it yourself as:
 
 ## Usage
 
+The gem provides a `match_snapshot` RSpec matcher:
+
+```ruby
+expect(generated_email).to match_snapshot("welcome_email")
+```
+
+The first time that this test is run, the value of `generated_email` will
+be stored in your snapshot directory with the specified name. After that,
+when the test is run, `generated_email` will be checked against what is
+stored in the file. If it's the same, your test will pass. If it differs,
+your test will fail.
+
+If you run RSpec with `UPDATE_SNAPSHOTS` environment variable set, the existing
+stored snapshot will be overwritten, and instead the current value of
+`generated_email` will be trusted.
+
 ### Configration
 
 ```ruby
