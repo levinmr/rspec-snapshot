@@ -17,7 +17,8 @@ module RSpec
           filename = "#{@snapshot_name}.snap"
           snap_path = File.join(snapshot_dir, filename)
           FileUtils.mkdir_p(File.dirname(snap_path)) unless Dir.exist?(File.dirname(snap_path))
-          if File.exist?(snap_path)
+
+          if File.exist?(snap_path) && !update_snapshots?
             file = File.new(snap_path)
             @expect = file.read
             file.close
@@ -73,6 +74,10 @@ module RSpec
           else
             return serializer.dump(object)
           end
+        end
+
+        def update_snapshots?
+          ENV["UPDATE_SNAPSHOTS"]
         end
       end
     end
