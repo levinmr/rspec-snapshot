@@ -13,7 +13,6 @@ module RSpec
 
         def matches?(actual)
           @actual = serialize(actual)
-          p @actual
           filename = "#{@snapshot_name}.snap"
           snap_path = File.join(snapshot_dir, filename)
           FileUtils.mkdir_p(File.dirname(snap_path)) unless Dir.exist?(File.dirname(snap_path))
