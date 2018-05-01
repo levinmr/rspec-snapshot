@@ -6,9 +6,10 @@ module RSpec
   module Snapshot
     module Matchers
       class MatchSnapShot
-        def initialize(metadata, snapshot_name)
+        def initialize(metadata, snapshot_name, config)
           @metadata = metadata
           @snapshot_name = snapshot_name
+          @config = config
         end
 
         def matches?(actual)
@@ -43,14 +44,34 @@ module RSpec
           end
         end
 
-        def serialize(object)
-          serializer_name = RSpec.configuration.snapshot_serializer
-          if serializer_name.nil?
-            return object.ai(plain: true, indent: 2)
-          else
+        def get_serializer(serializer_name)
+          if serializer_name.is_a?(String)
             require "rspec-snapshot-#{serializer_name}"
             serializer_class = serializer_name.to_s.camelize.constantize
-            return serializer_class.new.dump(object)
+          else
+            serializer_class = serializer_name
+          end
+          return serializer_class.new
+        end
+
+        def find_serializer(object)
+          serializer = @config[:serializer] ? get_serializer(@config[:serializer]) : nil
+          return serializer unless serializer.nil?
+
+          RSpec.configuration.snapshot_serializers.each do |serializer_name|
+            serializer = get_serializer[serializer_name];
+            return serializer if serializer.test(object)
+          end
+
+          return nil
+        end
+
+        def serialize(object)
+          serializer = find_serializer(object)
+          if serializer.nil?
+            return object.ai(plain: true, indent: 2)
+          else
+            return serializer.dump(object)
           end
         end
       end
