@@ -27,6 +27,9 @@ RSpec.configure do |config|
   # The default setting is `:relative`, which means snapshots will be generate to
   # the relative path of the spec file.
   config.snapshot_dir = "spec/fixtures/snapshots"
+
+  # Add custom serializer
+  # config.snapshot_serializers = [ JSONSerializer ]
 end
 ```
 
@@ -61,7 +64,44 @@ RSpec.describe "widgets/index", type: :view do
 end
 ```
 
-Use your imagination for other usages!
+## Custom serializers
+
+You can pass custom serializers to `rspec_snapshot`, here is a example JSON serializer:
+
+```ruby
+require "json"
+
+class JSONSerializer
+  def test(object)
+    begin
+      JSON.parse!(object)
+      return true
+    else
+      return false
+    end
+  end
+
+  def dump(object)
+    JSON.pretty_generate(JSON.parse(object))
+  end
+end
+
+```
+
+You can add custom serializers to global configuration:
+
+```ruby
+RSpec.configure do |config|
+  config.snapshot_serializers = [ JSONSerializer ]
+end
+```
+
+Or specify it per test case:
+
+```ruby
+expect(api_response).to match_snapshot("my_api_response", { serializer: JSONSerializer })
+```
+
 
 ## Development
 

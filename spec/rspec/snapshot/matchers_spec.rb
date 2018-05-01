@@ -1,6 +1,6 @@
 require "spec_helper"
 require "active_support/core_ext/string"
-require "html_serializer"
+require "json_serializer"
 
 describe RSpec::Snapshot::Matchers do
   it "snapshot hash" do
@@ -21,7 +21,7 @@ describe RSpec::Snapshot::Matchers do
   end
 
   it "support custom serializer" do
-    hash = "<html><head><title>Hello</title></head><body><h1>world</h1></body></html>"
-    expect(hash).to match_snapshot("custom_serializer", { serializer: HtmlSerializer })
+    json = '{"a": 1, "b": 2}'
+    expect(json).to match_snapshot("custom_serializer", { serializer: JSONSerializer })
   end
 end
