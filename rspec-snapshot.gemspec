@@ -19,9 +19,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "rspec", "> 3.0.0"
+  spec.add_dependency "activesupport", "> 4.0.0"
+  spec.add_dependency "awesome_print", "> 1.0.0"
 
   spec.add_development_dependency "bundler", "~> 1.12"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "pry", "~> 0.10.4"
+  spec.add_development_dependency "pry-byebug", "~> 3.6.0"
   spec.add_development_dependency "activesupport", "~> 5.0.0"
+  spec.add_development_dependency "nokogiri", "~> 1.8.2"
+  spec.add_development_dependency "htmlbeautifier", "~> 1.3.1"
 end
