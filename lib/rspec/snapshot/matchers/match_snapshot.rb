@@ -4,6 +4,8 @@ module RSpec
   module Snapshot
     module Matchers
       class MatchSnapShot
+        attr_reader :actual, :expected
+
         def initialize(metadata, snapshot_name)
           @metadata = metadata
           @snapshot_name = snapshot_name
@@ -16,9 +18,9 @@ module RSpec
           FileUtils.mkdir_p(File.dirname(snap_path)) unless Dir.exist?(File.dirname(snap_path))
           if File.exist?(snap_path)
             file = File.new(snap_path)
-            @expect = file.read
+            @expected = file.read
             file.close
-            @actual.to_s == @expect
+            @actual.to_s == @expected
           else
             RSpec.configuration.reporter.message "Generate #{snap_path}"
             file = File.new(snap_path, "w+")
@@ -28,9 +30,12 @@ module RSpec
           end
         end
 
+        def diffable?
+          true
+        end
 
         def failure_message
-          "\nexpected: #{@expect}\n     got: #{@actual}\n"
+          "\nexpected: #{@expected}\n     got: #{@actual}\n"
         end
 
         def snapshot_dir
