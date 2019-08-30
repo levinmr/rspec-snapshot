@@ -23,7 +23,7 @@ module RSpec
             @expected = file.read
             file.close
             if @json_structure_only
-              json_structure_match(@actual, @expected)
+              json_structure_match(@actual, @expected) && json_structure_match(@expected, @actual)
             else
               @actual.to_s == @expected
             end
