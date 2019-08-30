@@ -52,7 +52,7 @@ RSpec.describe "Posts", type: :request do
     it "returns a list of post" do
       get posts_path
 
-      expect(response.body).to match_snapshot("get_posts", json_structure_only=true)
+      expect(response.body).to match_json_structure_snapshot("get_posts")
     end
   end
 end

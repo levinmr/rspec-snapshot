@@ -13,11 +13,11 @@ describe RSpec::Snapshot::Matchers do
     it 'snapshot deep json' do
       json = JSON.pretty_generate(a: 100, b: [200, 300, 301, 302], c: { ca: 400 }, d: '500')
 
-      expect(json).to match_snapshot('snapshot/deep_json', true)
+      expect(json).to match_json_structure_snapshot('snapshot/deep_json')
 
       json = JSON.pretty_generate(a: '100', b: nil, c: { ca: 400 }, d: '500')
 
-      expect(json).not_to match_snapshot('snapshot/deep_json', true)
+      expect(json).not_to match_json_structure_snapshot('snapshot/deep_json')
     end
   end
 
