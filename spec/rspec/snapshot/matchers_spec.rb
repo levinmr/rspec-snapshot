@@ -1,15 +1,27 @@
-require "spec_helper"
-require "json"
+require 'spec_helper'
+require 'json'
 require 'active_support/core_ext/string'
 
 describe RSpec::Snapshot::Matchers do
-  it "snapshot json" do
-    json = JSON.pretty_generate({ a: 1, b: 2 })
+  context 'when json data' do
+    it 'snapshot json' do
+      json = JSON.pretty_generate(a: 1, b: 2)
 
-    expect(json).to match_snapshot("snapshot/json")
+      expect(json).to match_snapshot('snapshot/json')
+    end
+
+    it 'snapshot deep json' do
+      json = JSON.pretty_generate(a: 100, b: [200, 300, 301, 302], c: { ca: 400 }, d: '500')
+
+      expect(json).to match_snapshot('snapshot/deep_json', json_structure_only = true)
+
+      json = JSON.pretty_generate(a: '100', b: nil, c: { ca: 400 }, d: '500')
+
+      expect(json).not_to match_snapshot('snapshot/deep_json', json_structure_only = true)
+    end
   end
 
-  it "snapshot html" do
+  it 'snapshot html' do
     html = <<-HTML.strip_heredoc
     <!DOCTYPE html>
     <html lang="en">
@@ -26,13 +38,13 @@ describe RSpec::Snapshot::Matchers do
     </html>
     HTML
 
-    expect(html).to match_snapshot("snapshot/html")
+    expect(html).to match_snapshot('snapshot/html')
   end
 
-  context "when snapshotting non-string objects" do
-    it "stringifies simple POROs" do
-      simple_data_structure = { a_key: %w(some values) }
-      expect(simple_data_structure).to match_snapshot("snapshot/simple_data_structure")
+  context 'when snapshotting non-string objects' do
+    it 'stringifies simple POROs' do
+      simple_data_structure = { a_key: %w[some values] }
+      expect(simple_data_structure).to match_snapshot('snapshot/simple_data_structure')
     end
   end
 end
