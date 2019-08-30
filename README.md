@@ -44,6 +44,20 @@ RSpec.describe "Posts", type: :request do
 end
 ```
 
+#### request testing only data structure (Only if JSON)
+
+```ruby
+RSpec.describe "Posts", type: :request do
+  describe "GET /posts" do
+    it "returns a list of post" do
+      get posts_path
+
+      expect(response.body).to match_snapshot("get_posts", json_structure_only=true)
+    end
+  end
+end
+```
+
 ### Rails view testing
 
 ```ruby
