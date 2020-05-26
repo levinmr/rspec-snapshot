@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = RSpec::Snapshot::VERSION
   spec.authors       = ["Wei Zhu"]
   spec.email         = ["yesmeck@gmail.com"]
+  spec.license     = "MIT"
 
   spec.summary       = %q{RSpec Snapshot Matcher}
   spec.description   = %q{Adding snapshot testing to RSpec}
