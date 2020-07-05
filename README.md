@@ -1,5 +1,7 @@
 # RSpec::Snapshot [![Build Status](https://travis-ci.org/yesmeck/rspec-snapshot.svg?branch=master)](https://travis-ci.org/yesmeck/rspec-snapshot)
 
+**This project is looking for a new maintainer, drop me an email if you are interested.**
+
 Adding snapshot testing to RSpec, inspired by [Jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
 
 ## Installation
