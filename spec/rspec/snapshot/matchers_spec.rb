@@ -1,5 +1,4 @@
 require "spec_helper"
-require "active_support/core_ext/string"
 require "json_serializer"
 
 describe RSpec::Snapshot::Matchers do
@@ -27,7 +26,7 @@ describe RSpec::Snapshot::Matchers do
 
     context "with an HTML value" do
       it "stores an HTML snapshot" do
-        html = <<-HTML.strip_heredoc
+        html = <<~HTML
         <!DOCTYPE html>
         <html lang="en">
         <head>

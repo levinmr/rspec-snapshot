@@ -1,11 +1,14 @@
 require "fileutils"
 require "awesome_print"
-require "active_support/core_ext/string"
+
+require "rspec/snapshot/refinements/string/camelcase"
 
 module RSpec
   module Snapshot
     module Matchers
       class MatchSnapShot
+        using StringCamelcase
+
         attr_reader :actual, :expected
 
         def initialize(metadata, snapshot_name, config)
@@ -53,7 +56,7 @@ module RSpec
         def get_serializer(serializer_name)
           if serializer_name.is_a?(String)
             require "rspec-snapshot-#{serializer_name}"
-            serializer_class = serializer_name.to_s.camelize.constantize
+            serializer_class = Object.const_get(serializer_name.to_s.upper_camelcase)
           else
             serializer_class = serializer_name
           end
