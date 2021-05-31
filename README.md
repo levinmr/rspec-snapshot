@@ -4,6 +4,8 @@
 
 Adding snapshot testing to RSpec, inspired by [Jest](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
 
+**Using the [`snapshot_testing` gem](https://github.com/rzane/snapshot_testing) is recommended instead.**
+
 ## Installation
 
 Add this line to your application's Gemfile:
