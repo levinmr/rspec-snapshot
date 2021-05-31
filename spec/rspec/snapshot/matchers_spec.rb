@@ -2,12 +2,15 @@ require "spec_helper"
 require "json_serializer"
 
 describe RSpec::Snapshot::Matchers do
-  before do
+  def remove_snapshots
     current_path = Pathname.new(File.expand_path(__FILE__))
     snaps_glob = current_path.join("..", "..", "..", "fixtures", "snapshots", "*.snap")
 
     Dir[snaps_glob].each { |path| File.unlink(path) }
   end
+
+  before(:all) { remove_snapshots }
+  after(:all) { remove_snapshots }
 
   context "when the snapshot doesn't exist yet" do
     context "with a hash" do
