@@ -22,6 +22,22 @@ Or install it yourself as:
 
 ## Usage
 
+The gem provides a `match_snapshot` RSpec matcher:
+
+```ruby
+expect(generated_email).to match_snapshot("welcome_email")
+```
+
+The first time that this test is run, the value of `generated_email` will
+be stored in your snapshot directory with the specified name. After that,
+when the test is run, `generated_email` will be checked against what is
+stored in the file. If it's the same, your test will pass. If it differs,
+your test will fail.
+
+If you run RSpec with `UPDATE_SNAPSHOTS` environment variable set, the existing
+stored snapshot will be overwritten, and instead the current value of
+`generated_email` will be trusted.
+
 ### Configration
 
 ```ruby
@@ -29,6 +45,9 @@ RSpec.configure do |config|
   # The default setting is `:relative`, which means snapshots will be generate to
   # the relative path of the spec file.
   config.snapshot_dir = "spec/fixtures/snapshots"
+
+  # Add custom serializer
+  # config.snapshot_serializers = [ JSONSerializer ]
 end
 ```
 
@@ -63,7 +82,44 @@ RSpec.describe "widgets/index", type: :view do
 end
 ```
 
-Use your imagination for other usages!
+## Custom serializers
+
+You can pass custom serializers to `rspec_snapshot`, here is a example JSON serializer:
+
+```ruby
+require "json"
+
+class JSONSerializer
+  def test(object)
+    begin
+      JSON.parse!(object)
+      return true
+    else
+      return false
+    end
+  end
+
+  def dump(object)
+    JSON.pretty_generate(JSON.parse(object))
+  end
+end
+
+```
+
+You can add custom serializers to global configuration:
+
+```ruby
+RSpec.configure do |config|
+  config.snapshot_serializers = [ JSONSerializer ]
+end
+```
+
+Or specify it per test case:
+
+```ruby
+expect(api_response).to match_snapshot("my_api_response", { serializer: JSONSerializer })
+```
+
 
 ## Development
 
