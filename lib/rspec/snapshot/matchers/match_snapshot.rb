@@ -16,7 +16,7 @@ module RSpec
           @snapshot_name = snapshot_name
           @config = config
           @serializer = serializer_class.new
-          @html_serializer = html_serializer_class.new
+          @html_serializer = html_serializer_class.new if use_html_serializer?
           @snapshot_path = File.join(snapshot_dir, "#{@snapshot_name}.snap")
           create_snapshot_dir
         end
@@ -70,7 +70,7 @@ module RSpec
 
         private def serialize(value)
           if value.is_a?(String)
-            if RSpec.configuration.snapshot_serialize_all_strings_as_html || @config[:html]
+            if use_html_serializer?
               @html_serializer.dump(value)
             else
               value
@@ -78,6 +78,10 @@ module RSpec
           else
             @serializer.dump(value)
           end
+        end
+
+        private def use_html_serializer?
+          RSpec.configuration.snapshot_serialize_all_strings_as_html || @config[:html]
         end
 
         private def write_snapshot
