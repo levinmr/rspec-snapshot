@@ -18,6 +18,15 @@ Or install it yourself as:
 
     $ gem install rspec-snapshot
 
+## Optional peer dependency: htmlbeautifier
+
+By default, `rspec-snapshot` serializes string values as-is. If you want
+to serialize them as human-readable HTML, you can add `htmlbeautifier`
+to your gemfile and enable the relevant config options.
+
+You can also supply a different HTML serializer if you want. If you do
+that, you don't have to install `htmlbeautifier`.
+
 ## Usage
 
 The gem provides `match_snapshot` and `snapshot` RSpec matchers which take
