@@ -27,6 +27,9 @@ a snapshot name as an argument like:
 # match_snapshot
 expect(generated_email).to match_snapshot('welcome_email')
 
+# match_snapshot with HTML serializer using the :html config option
+expect(html_response).to match_snapshot('html_response', { html: true })
+
 # match argument with snapshot
 expect(logger).to have_received(:info).with(snapshot('log message'))
 ```
@@ -95,19 +98,33 @@ RSpec.configure do |config|
   # created in a '__snapshots__' directory adjacent to the spec file where the
   # matcher is used.
   #
-  # Set this value to put all snapshots in a fixed directory
+  # Set this value to put all snapshots in a fixed directory.
   config.snapshot_dir = "spec/fixtures/snapshots"
 
-  # Defaults to using the awesome_print gem to serialize values for snapshots
+  # Defaults to using the htmlbeautifier gem to serialize html values for snapshots.
   #
-  # Set this value to use a custom snapshot serializer
+  # Set this value to use a custom snapshot serializer for html strings.
+  #
+  # You will also need to set `:html` in the example metadata,
+  # or enable the `snapshot_serialize_all_strings_as_html` config setting.
+  config.snapshot_html_serializer = MyFavoriteHtmlSerializer
+
+  # The default setting is to only serialize string values as HTML when `:html`
+  # is set on the example metadata.
+  #
+  # Set this value to `true` to serialize all string values as though they are HTML.
+  config.snapshot_serialize_all_strings_as_html = true
+
+  # Defaults to using the awesome_print gem to serialize non-string values for snapshots.
+  #
+  # Set this value to use a custom snapshot serializer.
   config.snapshot_serializer = MyFavoriteSerializer
 end
 ```
 
 ### Custom serializers
 
-By default, values to be stored as snapshots are serialized to human readable
+By default, non-string values to be stored as snapshots are serialized to human readable
 string form using the [awesome_print](https://github.com/awesome-print/awesome_print) gem.
 
 You can pass custom serializers to `rspec-snapshot` if you prefer. Pass a serializer class name to the global RSpec config, or to an individual
@@ -120,8 +137,29 @@ RSpec.configure do |config|
 end
 
 # Set a custom serializer for this specific test
+# Note: This does not apply if the value passed to `expect` is a string.
+expect(value).to(
+  match_snapshot('value', { snapshot_serializer: MyAwesomeValueSerializer })
+)
+```
+
+When `:html` is set on a test example's metadata, string values are serialized to human readable
+HTML using the [htmlbeautifier](https://github.com/threedaymonk/htmlbeautifier) gem.
+
+You can pass a custom HTML serializer as a class name to the global RSpec config, or to an individual matcher as a config option:
+
+```ruby
+# Set a custom HTML serializer for all tests
+RSpec.configure do |config|
+  config.snapshot_serializer = MyCoolGeneralHTMLSerializer
+end
+
+# Set a custom html serializer for this specific test.
+# This only applies if the value passed to `expect` is a string,
+# and either `:html` is set on the example metadata,
+# or the global `snapshot_serialize_all_strings_as_html` config option is enabled.
 expect(html_response).to(
-  match_snapshot('html_response', { snapshot_serializer: MyAwesomeHTMLSerializer })
+  match_snapshot('html_response', { snapshot_html_serializer: MyAwesomeHTMLSerializer })
 )
 ```
 

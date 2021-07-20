@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require 'rspec/snapshot/default_html_serializer'
 require 'rspec/snapshot/default_serializer'
 
 module RSpec
@@ -15,6 +16,7 @@ module RSpec
           @snapshot_name = snapshot_name
           @config = config
           @serializer = serializer_class.new
+          @html_serializer = html_serializer_class.new
           @snapshot_path = File.join(snapshot_dir, "#{@snapshot_name}.snap")
           create_snapshot_dir
         end
@@ -26,6 +28,16 @@ module RSpec
             RSpec.configuration.snapshot_serializer
           else
             DefaultSerializer
+          end
+        end
+
+        private def html_serializer_class
+          if @config[:snapshot_html_serializer]
+            @config[:snapshot_html_serializer]
+          elsif RSpec.configuration.snapshot_html_serializer
+            RSpec.configuration.snapshot_html_serializer
+          else
+            DefaultHtmlSerializer
           end
         end
 
@@ -58,7 +70,11 @@ module RSpec
 
         private def serialize(value)
           if value.is_a?(String)
-            value
+            if RSpec.configuration.snapshot_serialize_all_strings_as_html || @config[:html]
+              @html_serializer.dump(value)
+            else
+              value
+            end
           else
             @serializer.dump(value)
           end

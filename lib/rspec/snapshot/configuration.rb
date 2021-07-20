@@ -10,6 +10,10 @@ module RSpec
     def self.initialize_configuration(config)
       config.add_setting :snapshot_dir, default: :relative
 
+      config.add_setting :snapshot_html_serializer, default: nil
+
+      config.add_setting :snapshot_serialize_all_strings_as_html, default: false
+
       config.add_setting :snapshot_serializer, default: nil
     end
 
