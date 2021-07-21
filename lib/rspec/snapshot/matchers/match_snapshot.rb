@@ -14,9 +14,20 @@ module RSpec
           @metadata = metadata
           @snapshot_name = snapshot_name
           @config = config
+          @formatter = formatter
           @serializer = serializer_class.new
           @snapshot_path = File.join(snapshot_dir, "#{@snapshot_name}.snap")
           create_snapshot_dir
+        end
+
+        private def formatter
+          if @config[:snapshot_formatter]
+            @config[:snapshot_formatter]
+          elsif RSpec.configuration.snapshot_formatter
+            RSpec.configuration.snapshot_formatter
+          else
+            ->(value) { value }
+          end
         end
 
         private def serializer_class
@@ -44,7 +55,7 @@ module RSpec
         end
 
         def matches?(actual)
-          @actual = serialize(actual)
+          @actual = serialize(format(actual))
 
           write_snapshot
 
@@ -55,6 +66,14 @@ module RSpec
 
         # === is the method called when matching an argument
         alias === matches?
+
+        private def format(value)
+          if value.is_a?(String)
+            @formatter.call(value)
+          else
+            value
+          end
+        end
 
         private def serialize(value)
           if value.is_a?(String)

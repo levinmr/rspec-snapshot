@@ -10,6 +10,8 @@ module RSpec
     def self.initialize_configuration(config)
       config.add_setting :snapshot_dir, default: :relative
 
+      config.add_setting :snapshot_formatter, default: nil
+
       config.add_setting :snapshot_serializer, default: nil
     end
 

@@ -98,6 +98,11 @@ RSpec.configure do |config|
   # Set this value to put all snapshots in a fixed directory
   config.snapshot_dir = "spec/fixtures/snapshots"
 
+  # Defaults to not applying any additional formatting
+  #
+  # Set this value to use a custom formatter for when `expect` receives a string
+  config.snapshot_formatter = MyFavoriteFormatter
+
   # Defaults to using the awesome_print gem to serialize values for snapshots
   #
   # Set this value to use a custom snapshot serializer
@@ -114,18 +119,31 @@ You can pass custom serializers to `rspec-snapshot` if you prefer. Pass a serial
 matcher as a config option:
 
 ```ruby
+# Set a custom string formatter for all tests
+RSpec.configure do |config|
+  config.snapshot_formatter = MyCoolGeneralFormatter
+end
+
 # Set a custom serializer for all tests
 RSpec.configure do |config|
   config.snapshot_serializer = MyCoolGeneralSerializer
 end
 
-# Set a custom serializer for this specific test
+# Set a custom formatter for this specific test
 expect(html_response).to(
-  match_snapshot('html_response', { snapshot_serializer: MyAwesomeHTMLSerializer })
+  match_snapshot('html_response', { snapshot_formatter: MyAwesomeFormatter })
+)
+
+# Set a custom serializer for this specific test
+expect(result_object).to(
+  match_snapshot('result_object', { snapshot_serializer: MyAwesomeSerializer })
 )
 ```
 
-Serializer classes are required to have one instance method `dump` which takes
+Formatters are required to have a single `call` method that takes the raw string value
+and returns a formatted string. If you want, you can use a proc or lambda.
+
+Serializer classes are required to have one instance method `dump`, which takes
 the value to be serialized and returns a string.
 
 ## Migration
