@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'byebug'
   spec.add_development_dependency 'pry-byebug'
   spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'rubocop', '~> 1.17'
-  spec.add_development_dependency 'rubocop-rspec', '~> 2.4'
+  spec.add_development_dependency 'rubocop', '~> 1.22'
+  spec.add_development_dependency 'rubocop-rspec', '~> 2.5'
   spec.add_development_dependency 'simplecov'
 end
