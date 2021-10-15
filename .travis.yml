@@ -1,7 +1,9 @@
 sudo: false
 language: ruby
+dist: focal
 rvm:
   - 2.5.9
-  - 2.6.7
-  - 2.7.3
-before_install: gem install bundler:2.2.20
+  - 2.6.8
+  - 2.7.4
+  - 3.0.2
+before_install: gem install bundler:2.2.22
