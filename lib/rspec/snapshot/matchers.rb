@@ -7,7 +7,7 @@ module RSpec
     # rubocop:disable Style/Documentation
     module Matchers
       def match_snapshot(snapshot_name, config = {})
-        MatchSnapShot.new(RSpec.current_example.metadata,
+        MatchSnapshot.new(RSpec.current_example.metadata,
                           snapshot_name,
                           config)
       end

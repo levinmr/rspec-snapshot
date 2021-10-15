@@ -3,17 +3,15 @@
 module RSpec
   # rubocop:disable Style/Documentation
   module Snapshot
-    # rubocop:disable Lint/EmptyClass
-    class Configuration; end
-    # rubocop:enable Lint/EmptyClass
+    class Configuration
+      def self.initialize_configuration(config)
+        config.add_setting :snapshot_dir, default: :relative
 
-    def self.initialize_configuration(config)
-      config.add_setting :snapshot_dir, default: :relative
-
-      config.add_setting :snapshot_serializer, default: nil
+        config.add_setting :snapshot_serializer, default: nil
+      end
     end
 
-    initialize_configuration RSpec.configuration
+    Configuration.initialize_configuration RSpec.configuration
   end
   # rubocop:enable Style/Documentation
 end
