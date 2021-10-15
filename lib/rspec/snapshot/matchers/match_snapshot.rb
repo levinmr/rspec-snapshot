@@ -7,7 +7,7 @@ module RSpec
   module Snapshot
     module Matchers
       # RSpec matcher for snapshot testing
-      class MatchSnapShot
+      class MatchSnapshot
         attr_reader :actual, :expected
 
         def initialize(metadata, snapshot_name, config)
@@ -55,13 +55,12 @@ module RSpec
 
         # === is the method called when matching an argument
         alias === matches?
+        alias match matches?
 
         private def serialize(value)
-          if value.is_a?(String)
-            value
-          else
-            @serializer.dump(value)
-          end
+          return value if value.is_a?(String)
+
+          @serializer.dump(value)
         end
 
         private def write_snapshot
@@ -88,6 +87,10 @@ module RSpec
           value = file.read
           file.close
           value
+        end
+
+        def description
+          "to match a snapshot containing: \"#{@expected}\""
         end
 
         def diffable?
