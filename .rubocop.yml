@@ -47,7 +47,7 @@ RSpec/ExpectInHook:
 RSpec/FilePath:
   Enabled: true
 RSpec/InstanceVariable:
-  Enabled: false
+  Enabled: true
 RSpec/LeakyConstantDeclaration:
   Enabled: true
 RSpec/LetSetup:
