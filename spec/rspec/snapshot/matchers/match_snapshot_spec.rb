@@ -201,9 +201,9 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
         context 'and the value to match is a string' do
           let(:value_to_match) { 'value to match' }
 
-          before do
+          let!(:actual) do
             allow(file).to receive(:read).and_return(value_to_match)
-            @actual = subject.matches?(value_to_match)
+            subject.matches?(value_to_match)
           end
 
           it 'does not serialize the value' do
@@ -238,7 +238,7 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           end
 
           it 'returns true' do
-            expect(@actual).to be(true)
+            expect(actual).to be(true)
           end
         end
 
@@ -246,12 +246,12 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           let(:value_to_match) { { foo: :bar } }
           let(:serialized_value) { '{ "foo": ":bar" }' }
 
-          before do
+          let!(:actual) do
             allow(serializer).to(
               receive(:dump).with(value_to_match).and_return(serialized_value)
             )
             allow(file).to receive(:read).and_return(serialized_value)
-            @actual = subject.matches?(value_to_match)
+            subject.matches?(value_to_match)
           end
 
           it 'serializes the value' do
@@ -286,7 +286,7 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           end
 
           it 'returns true' do
-            expect(@actual).to be(true)
+            expect(actual).to be(true)
           end
         end
       end
@@ -299,9 +299,9 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
         context 'and the value to match is a string' do
           let(:value_to_match) { 'value to match' }
 
-          before do
+          let!(:actual) do
             allow(file).to receive(:read).and_return(value_to_match)
-            @actual = subject.matches?(value_to_match)
+            subject.matches?(value_to_match)
           end
 
           it 'does not serialize the value' do
@@ -336,7 +336,7 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           end
 
           it 'returns true' do
-            expect(@actual).to be(true)
+            expect(actual).to be(true)
           end
         end
 
@@ -344,12 +344,12 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           let(:value_to_match) { { foo: :bar } }
           let(:serialized_value) { '{ "foo": ":bar" }' }
 
-          before do
+          let!(:actual) do
             allow(serializer).to(
               receive(:dump).with(value_to_match).and_return(serialized_value)
             )
             allow(file).to receive(:read).and_return(serialized_value)
-            @actual = subject.matches?(value_to_match)
+            subject.matches?(value_to_match)
           end
 
           it 'serializes the value' do
@@ -384,7 +384,7 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           end
 
           it 'returns true' do
-            expect(@actual).to be(true)
+            expect(actual).to be(true)
           end
         end
       end
@@ -405,9 +405,9 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           let(:value_to_match) { 'value to match' }
 
           context 'and the snapshot file contents match the value' do
-            before do
+            let!(:actual) do
               allow(file).to receive(:read).and_return(value_to_match)
-              @actual = subject.matches?(value_to_match)
+              subject.matches?(value_to_match)
             end
 
             it 'does not serialize the value' do
@@ -437,14 +437,14 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             end
 
             it 'returns true' do
-              expect(@actual).to be(true)
+              expect(actual).to be(true)
             end
           end
 
           context 'and the snapshot file contents do not match the value' do
-            before do
+            let!(:actual) do
               allow(file).to receive(:read).and_return('non matching value')
-              @actual = subject.matches?(value_to_match)
+              subject.matches?(value_to_match)
             end
 
             it 'does not serialize the value' do
@@ -474,7 +474,7 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             end
 
             it 'returns false' do
-              expect(@actual).to be(false)
+              expect(actual).to be(false)
             end
           end
         end
@@ -490,9 +490,9 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           end
 
           context 'and the snapshot file contents match the value' do
-            before do
+            let!(:actual) do
               allow(file).to receive(:read).and_return(serialized_value)
-              @actual = subject.matches?(value_to_match)
+              subject.matches?(value_to_match)
             end
 
             it 'serializes the value' do
@@ -522,14 +522,14 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             end
 
             it 'returns true' do
-              expect(@actual).to be(true)
+              expect(actual).to be(true)
             end
           end
 
           context 'and the snapshot file contents do not match the value' do
-            before do
+            let!(:actual) do
               allow(file).to receive(:read).and_return('non matching value')
-              @actual = subject.matches?(value_to_match)
+              subject.matches?(value_to_match)
             end
 
             it 'serializes the value' do
@@ -559,7 +559,7 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             end
 
             it 'returns false' do
-              expect(@actual).to be(false)
+              expect(actual).to be(false)
             end
           end
         end
@@ -573,9 +573,9 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
         context 'and the value to match is a string' do
           let(:value_to_match) { 'value to match' }
 
-          before do
+          let!(:actual) do
             allow(file).to receive(:read).and_return(value_to_match)
-            @actual = subject.matches?(value_to_match)
+            subject.matches?(value_to_match)
           end
 
           it 'does not serialize the value' do
@@ -610,7 +610,7 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           end
 
           it 'returns true' do
-            expect(@actual).to be(true)
+            expect(actual).to be(true)
           end
         end
 
@@ -618,12 +618,12 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           let(:value_to_match) { { foo: :bar } }
           let(:serialized_value) { '{ "foo": ":bar" }' }
 
-          before do
+          let!(:actual) do
             allow(serializer).to(
               receive(:dump).with(value_to_match).and_return(serialized_value)
             )
             allow(file).to receive(:read).and_return(serialized_value)
-            @actual = subject.matches?(value_to_match)
+            subject.matches?(value_to_match)
           end
 
           it 'serializes the value' do
@@ -658,7 +658,7 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
           end
 
           it 'returns true' do
-            expect(@actual).to be(true)
+            expect(actual).to be(true)
           end
         end
       end

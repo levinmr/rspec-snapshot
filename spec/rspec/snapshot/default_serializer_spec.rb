@@ -9,9 +9,9 @@ describe RSpec::Snapshot::DefaultSerializer do
     let(:object_param) { Object.new }
     let(:expected) { 'foobar' }
 
-    before do
+    let!(:actual) do
       allow(object_param).to receive(:ai).and_return(expected)
-      @actual = subject.dump(object_param)
+      subject.dump(object_param)
     end
 
     it 'calls .ai on the object to serialize with awesome_print' do
@@ -19,7 +19,7 @@ describe RSpec::Snapshot::DefaultSerializer do
     end
 
     it 'returns the result from awesome_print' do
-      expect(@actual).to be(expected)
+      expect(actual).to be(expected)
     end
   end
 end
