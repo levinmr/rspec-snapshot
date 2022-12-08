@@ -210,27 +210,12 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(serializer).not_to have_received(:dump)
           end
 
-          it 'opens the snapshot file for writing' do
-            expect(File).to have_received(:new).with(snapshot_filepath, 'w+')
-          end
-
-          it 'writes the snapshot file with the value' do
-            expect(file).to have_received(:write).with(value_to_match)
-          end
-
-          it 'logs the snapshot write with the RSpec reporter' do
-            expect(RSpec.configuration.reporter).to(
-              have_received(:message)
-                .with("Snapshot written: #{snapshot_filepath}")
-            )
-          end
-
           it 'opens the snapshot file for reading' do
-            expect(File).to have_received(:new).with(snapshot_filepath)
+            expect(File).to have_received(:new).with(snapshot_filepath).twice
           end
 
           it 'reads the snapshot file' do
-            expect(file).to have_received(:read)
+            expect(file).to have_received(:read).twice
           end
 
           it 'closes the snapshot file after reading and writing' do
@@ -258,27 +243,12 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(serializer).to have_received(:dump).with(value_to_match)
           end
 
-          it 'opens the snapshot file for writing' do
-            expect(File).to have_received(:new).with(snapshot_filepath, 'w+')
-          end
-
-          it 'writes the snapshot file with the serialized value' do
-            expect(file).to have_received(:write).with(serialized_value)
-          end
-
-          it 'logs the snapshot write with the RSpec reporter' do
-            expect(RSpec.configuration.reporter).to(
-              have_received(:message)
-                .with("Snapshot written: #{snapshot_filepath}")
-            )
-          end
-
           it 'opens the snapshot file for reading' do
-            expect(File).to have_received(:new).with(snapshot_filepath)
+            expect(File).to have_received(:new).with(snapshot_filepath).twice
           end
 
           it 'reads the snapshot file' do
-            expect(file).to have_received(:read)
+            expect(file).to have_received(:read).twice
           end
 
           it 'closes the snapshot file after reading and writing' do
@@ -335,8 +305,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
 
@@ -383,8 +353,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
       end
@@ -590,13 +560,6 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:write).with(value_to_match)
           end
 
-          it 'logs the snapshot write with the RSpec reporter' do
-            expect(RSpec.configuration.reporter).to(
-              have_received(:message)
-                .with("Snapshot written: #{snapshot_filepath}")
-            )
-          end
-
           it 'opens the snapshot file for reading' do
             expect(File).to have_received(:new).with(snapshot_filepath)
           end
@@ -609,8 +572,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
 
@@ -657,8 +620,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
       end
@@ -699,6 +662,10 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
       subject.instance_variable_set(:@expected, expected)
       subject.instance_variable_set(:@actual, actual)
     end
+
+    before {
+      allow(subject).to receive(:should_write?).and_return(false)
+    }
 
     it 'returns a failure message including the actual and expected' do
       expect(subject.failure_message).to(
