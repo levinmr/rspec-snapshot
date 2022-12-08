@@ -43,6 +43,13 @@ module RSpec
           FileUtils.mkdir_p(File.dirname(@snapshot_path))
         end
 
+        def does_not_match?(actual)
+          @actual = serialize(actual)
+          @expected = read_snapshot
+
+          @actual != @expected
+        end
+
         def matches?(actual)
           @actual = serialize(actual)
 

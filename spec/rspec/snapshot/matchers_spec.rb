@@ -284,6 +284,32 @@ describe RSpec::Snapshot::Matchers do
         end
       end
 
+      context 'and a snapshot file exists' do
+        let(:original_snapshot_value) { 'foo' }
+        let(:updated_snapshot_value) { 'bar' }
+        let(:snapshot_name) { 'update_existing_snapshot' }
+        let(:snapshot_path) do
+          current_directory_path.join('__snapshots__',
+                                      "#{snapshot_name}.snap")
+        end
+
+        before do
+          file = File.new(snapshot_path, 'w+')
+          file.write(original_snapshot_value)
+          file.close
+          # rubocop:disable RSpec/ExpectInHook
+          expect(updated_snapshot_value).to_not match_snapshot(snapshot_name)
+          # rubocop:enable RSpec/ExpectInHook
+          file = File.new(snapshot_path)
+          @actual = file.read
+          file.close
+        end
+
+        it 'ignores the snapshot and updates it to the current value' do
+          expect(@actual).to_not eq(updated_snapshot_value)
+        end
+      end
+
       context 'and a snapshot file does not exist' do
         let(:snapshot_value) { 'foo' }
         let(:snapshot_name) { 'update_non_existing_snapshot' }
