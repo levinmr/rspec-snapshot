@@ -50,7 +50,11 @@ module RSpec
 
           @expected = read_snapshot
 
-          @actual == @expected
+          if should_write?
+            false
+          else
+            @actual == @expected
+          end
         end
 
         # === is the method called when matching an argument
@@ -98,7 +102,11 @@ module RSpec
         end
 
         def failure_message
-          "\nexpected: #{@expected}\n     got: #{@actual}\n"
+          if should_write?
+            "failing because we wrote a snapshot"
+          else
+            "\nexpected: #{@expected}\n     got: #{@actual}\n"
+          end
         end
 
         def failure_message_when_negated
