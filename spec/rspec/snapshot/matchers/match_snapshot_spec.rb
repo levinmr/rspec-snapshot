@@ -237,8 +237,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
 
@@ -285,8 +285,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
       end
@@ -335,8 +335,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
 
@@ -383,8 +383,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
       end
@@ -609,8 +609,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
 
@@ -657,8 +657,8 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
             expect(file).to have_received(:close).twice
           end
 
-          it 'returns true' do
-            expect(@actual).to be(true)
+          it 'returns false' do
+            expect(@actual).to be(false)
           end
         end
       end
@@ -700,10 +700,24 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
       subject.instance_variable_set(:@actual, actual)
     end
 
-    it 'returns a failure message including the actual and expected' do
-      expect(subject.failure_message).to(
-        eq("\nexpected: #{expected}\n     got: #{actual}\n")
-      )
+    context 'when should_write? is true' do
+      it 'returns a failure message including the actual and expected' do
+        expect(subject.failure_message).to(
+          eq("failing because we wrote a snapshot")
+        )
+      end
+    end
+
+    context 'when should_write? is false' do
+      before {
+        allow(subject).to receive(:should_write?).and_return(false)
+      }
+
+      it 'returns a failure message including the actual and expected' do
+        expect(subject.failure_message).to(
+          eq("\nexpected: #{expected}\n     got: #{actual}\n")
+        )
+      end
     end
   end
 

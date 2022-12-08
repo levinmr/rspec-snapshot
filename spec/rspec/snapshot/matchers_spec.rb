@@ -272,7 +272,9 @@ describe RSpec::Snapshot::Matchers do
           file.write(original_snapshot_value)
           file.close
           # rubocop:disable RSpec/ExpectInHook
-          expect(updated_snapshot_value).to match_snapshot(snapshot_name)
+          expect {
+            expect(updated_snapshot_value).to match_snapshot(snapshot_name)
+          }.to raise_error
           # rubocop:enable RSpec/ExpectInHook
           file = File.new(snapshot_path)
           @actual = file.read
@@ -295,7 +297,9 @@ describe RSpec::Snapshot::Matchers do
         before do
           File.unlink(snapshot_path) if File.exist?(snapshot_path)
           # rubocop:disable RSpec/ExpectInHook
+          expect {
           expect(snapshot_value).to match_snapshot(snapshot_name)
+          }.to raise_error
           # rubocop:enable RSpec/ExpectInHook
           file = File.new(snapshot_path)
           @actual = file.read
