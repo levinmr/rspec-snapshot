@@ -2,7 +2,6 @@
 
 require 'spec_helper'
 require 'json'
-require 'rspec/snapshot/default_serializer'
 require 'logger'
 
 describe RSpec::Snapshot::Matchers do
@@ -15,6 +14,22 @@ describe RSpec::Snapshot::Matchers do
     # rubocop:enable Lint/ConstantDefinitionInBlock
     # rubocop:enable RSpec/LeakyConstantDeclaration
     subject { TestClass.new }
+
+    let(:serializer) { instance_double(RSpec::Snapshot::DefaultSerializer) }
+    let(:serializer_factory) do
+      instance_double(RSpec::Snapshot::SerializerFactory)
+    end
+    let(:file_operator) { instance_double(RSpec::Snapshot::FileOperator) }
+
+    before do
+      allow(RSpec::Snapshot::SerializerFactory).to(
+        receive(:new).and_return(serializer_factory)
+      )
+      allow(serializer_factory).to receive(:create).and_return(serializer)
+      allow(RSpec::Snapshot::FileOperator).to(
+        receive(:new).and_return(file_operator)
+      )
+    end
 
     describe '.match_snapshot' do
       let(:current_example) { object_double(RSpec.current_example) }
@@ -34,9 +49,25 @@ describe RSpec::Snapshot::Matchers do
           subject.match_snapshot(snapshot_name, config)
         end
 
-        it 'creates a MatchSnapshot instance with the name and config' do
+        it 'creates a serializer factory instance with config' do
+          expect(RSpec::Snapshot::SerializerFactory).to(
+            have_received(:new).with(config)
+          )
+        end
+
+        it 'creates a serializer instance' do
+          expect(serializer_factory).to have_received(:create)
+        end
+
+        it 'creates a file operator instance with snapshot name and metadata' do
+          expect(RSpec::Snapshot::FileOperator).to(
+            have_received(:new).with(snapshot_name, rspec_metadata)
+          )
+        end
+
+        it 'creates a matcher instance with the serializer and file operator' do
           expect(RSpec::Snapshot::Matchers::MatchSnapshot).to(
-            have_received(:new).with(rspec_metadata, snapshot_name, config)
+            have_received(:new).with(serializer, file_operator)
           )
         end
       end
@@ -46,9 +77,25 @@ describe RSpec::Snapshot::Matchers do
           subject.match_snapshot(snapshot_name)
         end
 
-        it 'creates a MatchSnapshot instance with the name and config' do
+        it 'creates a serializer factory instance' do
+          expect(RSpec::Snapshot::SerializerFactory).to(
+            have_received(:new).with({})
+          )
+        end
+
+        it 'creates a serializer instance' do
+          expect(serializer_factory).to have_received(:create)
+        end
+
+        it 'creates a file operator instance with snapshot name and metadata' do
+          expect(RSpec::Snapshot::FileOperator).to(
+            have_received(:new).with(snapshot_name, rspec_metadata)
+          )
+        end
+
+        it 'creates a matcher instance with the serializer and file operator' do
           expect(RSpec::Snapshot::Matchers::MatchSnapshot).to(
-            have_received(:new).with(rspec_metadata, snapshot_name, {})
+            have_received(:new).with(serializer, file_operator)
           )
         end
       end
@@ -72,9 +119,25 @@ describe RSpec::Snapshot::Matchers do
           subject.snapshot(snapshot_name, config)
         end
 
-        it 'creates a MatchSnapshot instance with the name and config' do
+        it 'creates a serializer factory instance with config' do
+          expect(RSpec::Snapshot::SerializerFactory).to(
+            have_received(:new).with(config)
+          )
+        end
+
+        it 'creates a serializer instance' do
+          expect(serializer_factory).to have_received(:create)
+        end
+
+        it 'creates a file operator instance with snapshot name and metadata' do
+          expect(RSpec::Snapshot::FileOperator).to(
+            have_received(:new).with(snapshot_name, rspec_metadata)
+          )
+        end
+
+        it 'creates a matcher instance with the serializer and file operator' do
           expect(RSpec::Snapshot::Matchers::MatchSnapshot).to(
-            have_received(:new).with(rspec_metadata, snapshot_name, config)
+            have_received(:new).with(serializer, file_operator)
           )
         end
       end
@@ -84,9 +147,25 @@ describe RSpec::Snapshot::Matchers do
           subject.snapshot(snapshot_name)
         end
 
-        it 'creates a MatchSnapshot instance with the name and config' do
+        it 'creates a serializer factory instance' do
+          expect(RSpec::Snapshot::SerializerFactory).to(
+            have_received(:new).with({})
+          )
+        end
+
+        it 'creates a serializer instance' do
+          expect(serializer_factory).to have_received(:create)
+        end
+
+        it 'creates a file operator instance with snapshot name and metadata' do
+          expect(RSpec::Snapshot::FileOperator).to(
+            have_received(:new).with(snapshot_name, rspec_metadata)
+          )
+        end
+
+        it 'creates a matcher instance with the serializer and file operator' do
           expect(RSpec::Snapshot::Matchers::MatchSnapshot).to(
-            have_received(:new).with(rspec_metadata, snapshot_name, {})
+            have_received(:new).with(serializer, file_operator)
           )
         end
       end

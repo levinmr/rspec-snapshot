@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'rspec/snapshot/default_serializer'
 
 describe RSpec::Snapshot::DefaultSerializer do
   subject { described_class.new }
