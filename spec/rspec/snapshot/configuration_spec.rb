@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'rspec/snapshot/configuration'
 
 describe RSpec::Snapshot::Configuration do
   describe '.initialize_configuration' do

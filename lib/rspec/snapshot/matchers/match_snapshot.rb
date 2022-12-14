@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'fileutils'
-require 'rspec/snapshot/default_serializer'
-
 module RSpec
   module Snapshot
     module Matchers
@@ -10,43 +7,22 @@ module RSpec
       class MatchSnapshot
         attr_reader :actual, :expected
 
-        def initialize(metadata, snapshot_name, config)
-          @metadata = metadata
-          @snapshot_name = snapshot_name
-          @config = config
-          @serializer = serializer_class.new
-          @snapshot_path = File.join(snapshot_dir, "#{@snapshot_name}.snap")
-          create_snapshot_dir
+        # @param [#dump] serializer A class instance which responds to #dump to
+        # convert test values to string for writing to snapshot files.
+        # @param [FileOperator] file_operator Handles reading and writing the
+        # snapshot file contents.
+        def initialize(serializer, file_operator)
+          @serializer = serializer
+          @file_operator = file_operator
         end
 
-        private def serializer_class
-          if @config[:snapshot_serializer]
-            @config[:snapshot_serializer]
-          elsif RSpec.configuration.snapshot_serializer
-            RSpec.configuration.snapshot_serializer
-          else
-            DefaultSerializer
-          end
-        end
-
-        private def snapshot_dir
-          if RSpec.configuration.snapshot_dir.to_s == 'relative'
-            File.dirname(@metadata[:file_path]) << '/__snapshots__'
-          else
-            RSpec.configuration.snapshot_dir
-          end
-        end
-
-        private def create_snapshot_dir
-          return if Dir.exist?(File.dirname(@snapshot_path))
-
-          FileUtils.mkdir_p(File.dirname(@snapshot_path))
-        end
-
+        # @param [*] actual The received test value to compare to a snapshot.
+        # @return [Boolean] True if the serialized actual value matches the
+        # snapshot contents, false otherwise.
         def matches?(actual)
           @actual = serialize(actual)
 
-          write_snapshot
+          write_snapshot(@actual)
 
           @expected = read_snapshot
 
@@ -63,30 +39,12 @@ module RSpec
           @serializer.dump(value)
         end
 
-        private def write_snapshot
-          return unless should_write?
-
-          RSpec.configuration.reporter.message(
-            "Snapshot written: #{@snapshot_path}"
-          )
-          file = File.new(@snapshot_path, 'w+')
-          file.write(@actual)
-          file.close
-        end
-
-        private def should_write?
-          update_snapshots? || !File.exist?(@snapshot_path)
-        end
-
-        private def update_snapshots?
-          !!ENV.fetch('UPDATE_SNAPSHOTS', nil)
+        private def write_snapshot(value)
+          @file_operator.write(value)
         end
 
         private def read_snapshot
-          file = File.new(@snapshot_path)
-          value = file.read
-          file.close
-          value
+          @file_operator.read
         end
 
         def description
