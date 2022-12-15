@@ -189,8 +189,9 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
 
     context 'when UPDATE_SNAPSHOTS is true' do
       before do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('UPDATE_SNAPSHOTS').and_return('true')
+        allow(ENV).to receive(:fetch).and_call_original
+        allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
+                                           nil).and_return('true')
       end
 
       context 'and the snapshot file exists' do
@@ -392,8 +393,9 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
 
     context 'when UPDATE_SNAPSHOTS is not set' do
       before do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('UPDATE_SNAPSHOTS').and_return(nil)
+        allow(ENV).to receive(:fetch).and_call_original
+        allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
+                                           nil).and_return(nil)
       end
 
       context 'and the snapshot file exists' do
