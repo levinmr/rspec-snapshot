@@ -79,7 +79,7 @@ module RSpec
         end
 
         private def update_snapshots?
-          ENV['UPDATE_SNAPSHOTS']
+          !!ENV.fetch('UPDATE_SNAPSHOTS', nil)
         end
 
         private def read_snapshot

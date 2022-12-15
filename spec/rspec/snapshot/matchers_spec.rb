@@ -3,6 +3,7 @@
 require 'spec_helper'
 require 'json'
 require 'rspec/snapshot/default_serializer'
+require 'logger'
 
 describe RSpec::Snapshot::Matchers do
   describe 'unit tests' do
@@ -162,7 +163,7 @@ describe RSpec::Snapshot::Matchers do
               config.snapshot_dir = 'spec/fixtures/non_existing_snapshots_dir'
             end
 
-            File.unlink(snapshot_path) if File.exist?(snapshot_path)
+            FileUtils.rm_f(snapshot_path)
             FileUtils.rm_rf(snapshot_dir)
 
             expect(expected).to match_snapshot(snapshot_name)
@@ -256,8 +257,9 @@ describe RSpec::Snapshot::Matchers do
 
     context 'when UPDATE_SNAPSHOTS environment variable is set' do
       before do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('UPDATE_SNAPSHOTS').and_return(true)
+        allow(ENV).to receive(:fetch).and_call_original
+        allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
+                                           nil).and_return(true)
       end
 
       context 'and a snapshot file exists' do
@@ -296,7 +298,7 @@ describe RSpec::Snapshot::Matchers do
         end
 
         let!(:actual) do
-          File.unlink(snapshot_path) if File.exist?(snapshot_path)
+          FileUtils.rm_f(snapshot_path)
 
           expect(snapshot_value).to match_snapshot(snapshot_name)
 
@@ -314,8 +316,9 @@ describe RSpec::Snapshot::Matchers do
 
     context 'when UPDATE_SNAPSHOTS environment variable is not set' do
       before do
-        allow(ENV).to receive(:[]).and_call_original
-        allow(ENV).to receive(:[]).with('UPDATE_SNAPSHOTS').and_return(nil)
+        allow(ENV).to receive(:fetch).and_call_original
+        allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
+                                           nil).and_return(nil)
       end
 
       context 'and a snapshot file exists' do
@@ -354,7 +357,7 @@ describe RSpec::Snapshot::Matchers do
         end
 
         let!(:actual) do
-          File.unlink(snapshot_path) if File.exist?(snapshot_path)
+          FileUtils.rm_f(snapshot_path)
 
           expect(snapshot_value).to match_snapshot(snapshot_name)
 
@@ -372,7 +375,7 @@ describe RSpec::Snapshot::Matchers do
 
     context 'when matching an argument' do
       context 'with match_snapshot method' do
-        let(:logger) { instance_double('logger') }
+        let(:logger) { Logger.new($stdout) }
         let(:actual) { 'log message for match_snapshot' }
 
         before do
@@ -388,7 +391,7 @@ describe RSpec::Snapshot::Matchers do
       end
 
       context 'with snapshot method' do
-        let(:logger) { instance_double('logger') }
+        let(:logger) { Logger.new($stdout) }
         let(:actual) { 'log message for snapshot' }
 
         before do
@@ -486,8 +489,9 @@ describe RSpec::Snapshot::Matchers do
           file.write(serialized_value)
           file.close
 
-          allow(ENV).to receive(:[]).and_call_original
-          allow(ENV).to receive(:[]).with('UPDATE_SNAPSHOTS').and_return(nil)
+          allow(ENV).to receive(:fetch).and_call_original
+          allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
+                                             nil).and_return(nil)
           message = nil
 
           begin
@@ -519,8 +523,9 @@ describe RSpec::Snapshot::Matchers do
           file.write(snapshot_value)
           file.close
 
-          allow(ENV).to receive(:[]).and_call_original
-          allow(ENV).to receive(:[]).with('UPDATE_SNAPSHOTS').and_return(nil)
+          allow(ENV).to receive(:fetch).and_call_original
+          allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
+                                             nil).and_return(nil)
           message = nil
 
           begin
@@ -552,8 +557,9 @@ describe RSpec::Snapshot::Matchers do
           file.write(snapshot_value)
           file.close
 
-          allow(ENV).to receive(:[]).and_call_original
-          allow(ENV).to receive(:[]).with('UPDATE_SNAPSHOTS').and_return(nil)
+          allow(ENV).to receive(:fetch).and_call_original
+          allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
+                                             nil).and_return(nil)
           message = nil
 
           begin
