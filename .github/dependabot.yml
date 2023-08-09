@@ -1,11 +1,17 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
+registries:
+  rubygems-server-rubygems-pkg-github-com:
+    type: rubygems-server
+    url: https://rubygems.pkg.github.com
+    username: "${{secrets.RUBYGEMS_SERVER_RUBYGEMS_PKG_GITHUB_COM_USERNAME}}"
+    password: "${{secrets.RUBYGEMS_SERVER_RUBYGEMS_PKG_GITHUB_COM_PASSWORD}}"
+
 updates:
-  - package-ecosystem: "bundler" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
+- package-ecosystem: bundler
+  directory: "/"
+  insecure-external-code-execution: allow
+  schedule:
+    interval: daily
+    time: "02:00"
+    timezone: Canada/Central
+  open-pull-requests-limit: 10

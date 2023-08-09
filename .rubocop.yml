@@ -2,88 +2,175 @@ require:
   - rubocop-rspec
 
 AllCops:
-  NewCops: "enable"
   Exclude:
-    - "Gemfile"
-    - "Rakefile"
-    - "bin/**/*"
-    - "spec/fixtures/**/*"
-  TargetRubyVersion: 2.5
+    - "app/controllers/rails/health_controller.rb"
+    - "db/migrate/201*.rb"
+    - "db/migrate/2020*.rb"
+    - "db/versions_migrate/201*.rb"
+    - "node_modules/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - ".git/**/*"
+    - "**/bin/*"
+    - "lib/proto/**/*" # ignore computer generated gRPC files
+  NewCops: enable
+  SuggestExtensions: false
 
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
+Gemspec/RequireMFA:
+  Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Layout/FirstHashElementIndentation:
+  Enabled: false
+
 Layout/LineLength:
-  Max: 80
-Layout/SpaceAroundMethodCallOperator:
+  Exclude:
+    - Gemfile
+
+Layout/MultilineMethodCallBraceLayout:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+Layout/TrailingEmptyLines:
   Enabled: true
 
-Lint:
-  Severity: error
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-Lint/RaiseException:
-  Enabled: true
-Lint/StructNewOverride:
-  Enabled: true
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Lint/RedundantSafeNavigation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
 
 Metrics/BlockLength:
-  Exclude:
-    - "rspec-snapshot.gemspec"
-    - "spec/**/*"
+  Enabled: false
 
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Naming/BlockForwarding:
+  Enabled: false
+
+Naming/InclusiveLanguage:
+  Exclude:
+    - "db/migrate/2020*.rb"
+    - "app/models/shop_directory_setting.rb"
+
+Naming/VariableNumber:
+  Enabled: false
+
+Style/ArgumentsForwarding:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/ClassVars:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+Style/GlobalVars:
+  AllowedVariables:
+    [$config, $redis, $sidekiq_shutdown_pending, $kafka, $kafka_async_producer]
+
+Style/GuardClause:
+  Enabled: false
+
+Style/HashAsLastArrayItem:
+  Enabled: false
+
+Style/HashSyntax:
+  EnforcedShorthandSyntax: either
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/MixinUsage:
+  Exclude:
+    - bin/update
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/OptionalBooleanParameter:
+  Enabled: true
+  Exclude:
+    - "**/app/jobs/**/*"
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Rspec cops
 RSpec/AnyInstance:
-  Enabled: true
+  Enabled: false # disabled until we determine the right foundation for testing philosophy
 RSpec/ContextWording:
-  Prefixes:
-    - when
-    - with
-    - without
-    - and
+  Enabled: false
+RSpec/EmptyLineAfterExampleGroup:
+  Enabled: false
+RSpec/EmptyLineAfterHook:
+  Enabled: false
 RSpec/ExampleLength:
-  Enabled: true
-  Max: 10
-RSpec/ExpectInHook:
-  Enabled: true
-RSpec/FilePath:
-  Enabled: true
+  Enabled: false
+RSpec/ExampleWording:
+  Enabled: false
+RSpec/HookArgument:
+  Enabled: false
+RSpec/IndexedLet:
+  Enabled: false
 RSpec/InstanceVariable:
   Enabled: false
 RSpec/LeakyConstantDeclaration:
-  Enabled: true
-RSpec/LetSetup:
-  Enabled: true
+  Enabled: false
 RSpec/MessageSpies:
-  Enabled: true
+  Enabled: false
 RSpec/MultipleExpectations:
-  Enabled: true
+  Enabled: false
 RSpec/MultipleMemoizedHelpers:
-  Enabled: false
+  Max: 15
 RSpec/NamedSubject:
-  Enabled: false # Disabled for preference
-RSpec/NestedGroups:
-  Max: 6
-RSpec/ScatteredSetup:
-  Enabled: true
-RSpec/SubjectStub:
-  Enabled: true
-RSpec/VerifiedDoubles:
-  Enabled: true
-
-Style/AccessModifierDeclarations:
-  Enabled: false # Disabled since we follow Clean Code's newspaper code structure
-Style/DoubleNegation:
-  Enabled: true
-Style/ExponentialNotation:
-  Enabled: true
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Style/LineEndConcatenation:
   Enabled: false
-Style/MultilineTernaryOperator:
-  Enabled: false # Disabled due to preference
-Style/SlicingWithRange:
-  Enabled: true
+RSpec/NestedGroups:
+  Enabled: false
+RSpec/NoExpectationExample:
+  Enabled: false
+RSpec/NotToNot:
+  Enabled: false
+RSpec/PredicateMatcher:
+  Enabled: false
+RSpec/SubjectStub:
+  Enabled: false
+RSpec/DescribeClass:
+  Enabled: false
+RSpec/VerifiedDoubles:
+  Enabled: false
