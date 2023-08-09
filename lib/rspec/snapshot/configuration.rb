@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module RSpec
-  # rubocop:disable Style/Documentation
   module Snapshot
     class Configuration
       def self.initialize_configuration(config)

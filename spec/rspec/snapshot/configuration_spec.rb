@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe RSpec::Snapshot::Configuration do
-  describe '.initialize_configuration' do
+  describe ".initialize_configuration" do
     let(:rspec_configuration) { object_double(RSpec.configuration) }
 
     before do
@@ -11,13 +11,13 @@ describe RSpec::Snapshot::Configuration do
       described_class.initialize_configuration(rspec_configuration)
     end
 
-    it 'adds the rspec configuration setting for snapshot_dir' do
+    it "adds the rspec configuration setting for snapshot_dir" do
       expect(rspec_configuration).to(
         have_received(:add_setting).with(:snapshot_dir, default: :relative)
       )
     end
 
-    it 'adds the rspec configuration setting for snapshot_serializer' do
+    it "adds the rspec configuration setting for snapshot_serializer" do
       expect(rspec_configuration).to(
         have_received(:add_setting).with(:snapshot_serializer, default: nil)
       )
