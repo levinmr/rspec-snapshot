@@ -1,0 +1,39 @@
+on:
+  push:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.2', '3.1', '3.0', '2.7']
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - run: gem install bundler:2.4.22
+      - run: bundle install
+      - run: bundle exec rubocop
+    
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.2', '3.1', '3.0', '2.7']
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - run: gem install bundler:2.4.22
+      - run: bundle install
+      - run: cat Gemfile.lock
+      - run: bundle exec rspec
