@@ -47,6 +47,9 @@ RSpec.configure do |config|
     # ...rather than:
     #     # => "be bigger than 2"
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+
+    # Don't truncate large diffs
+    expectations.max_formatted_output_length = nil
   end
 
   # rspec-mocks config goes here. You can use an alternate test double
@@ -57,6 +60,10 @@ RSpec.configure do |config|
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
   end
+
+  # Enable colored output always because some tests rely on the rspec output
+  config.color = true
+  config.tty = true
 
   # This option will default to `:apply_to_host_groups` in RSpec 4 (and will
   # have no way to turn it off -- the option exists only for backwards
