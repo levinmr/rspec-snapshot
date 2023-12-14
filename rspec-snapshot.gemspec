@@ -26,14 +26,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'awesome_print', '> 1.0.0'
   spec.add_dependency 'rspec', '> 3.0.0'
-
-  spec.add_development_dependency 'bundler', '~> 2.3'
-  spec.add_development_dependency 'byebug'
-  spec.add_development_dependency 'pry-byebug'
-  spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'rubocop', '~> 1.40'
-  spec.add_development_dependency 'rubocop-rake', '~> 0.6.0'
-  spec.add_development_dependency 'rubocop-rspec', '~> 2.16'
-  spec.add_development_dependency 'simplecov'
   spec.metadata['rubygems_mfa_required'] = 'true'
 end
