@@ -154,12 +154,19 @@ Install a current version of ruby (> 2.5) and bundler. Then install gems
 
     $ bin/console
 
-### Rake commands
+### Installing the gem locally
 
-To install this gem onto your local machine, run `bundle exec rake install`. To
-release a new version, update the version number in `version.rb`, and then run
-`bundle exec rake release`, which will create a git tag for the version, push
-git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+    $ bundle exec rake install
+
+### Publishing a new gem version
+
+* Update the version number in `version.rb`
+* Ensure the changes to be published are merged to the master branch
+* Checkout the master branch locally
+* Run `bundle exec rake release`, which will:
+  * create a git tag for the version
+  * push git commits and tags
+  * push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
