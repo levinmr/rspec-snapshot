@@ -6,6 +6,8 @@ gemspec
 # Development dependencies
 gem 'bundler', '~> 2.3'
 gem 'byebug'
+gem 'guard'
+gem 'guard-rspec'
 gem 'pry-byebug'
 gem 'rake', '~> 13.0'
 gem 'rubocop', '~> 1.59'

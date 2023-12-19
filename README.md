@@ -150,6 +150,10 @@ Install a current version of ruby (> 2.5) and bundler. Then install gems
 
     $ bundle exec rspec
 
+## Automatic unit test runner
+
+    $ bundle exec guard
+
 ### Interactive console with the gem code loaded
 
     $ bin/console
