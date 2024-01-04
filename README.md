@@ -1,4 +1,4 @@
-# RSpec::Snapshot [![Build Status]!](https://github.com/github/docs/actions/workflows/ci.yml/badge.svg?branch=master)
+# RSpec::Snapshot ![Build Status](https://github.com/levinmr/rspec-snapshot/actions/workflows/ci.yml/badge.svg?branch=master)
 
 Adds snapshot testing to RSpec, inspired by [Jest](https://jestjs.io/).
 
