@@ -13,8 +13,8 @@ module RSpec
       # @param [Hash] metadata The RSpec metadata for the current test.
       def initialize(snapshot_name, metadata)
         snapshot_dir = snapshot_dir(metadata)
-        create_snapshot_dir(snapshot_dir)
         @snapshot_path = File.join(snapshot_dir, "#{snapshot_name}.snap")
+        create_snapshot_dir(@snapshot_path)
       end
 
       private def snapshot_dir(metadata)
@@ -26,7 +26,9 @@ module RSpec
       end
 
       private def create_snapshot_dir(snapshot_dir)
-        FileUtils.mkdir_p(snapshot_dir)
+        return if Dir.exist?(File.dirname(snapshot_dir))
+
+        FileUtils.mkdir_p(File.dirname(snapshot_dir))
       end
 
       # @return [String] The snapshot file contents.

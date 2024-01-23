@@ -38,6 +38,9 @@ describe RSpec::Snapshot::FileOperator do
 
     context 'when RSpec is configured with a fixed snapshot directory' do
       let(:fixed_snapshot_dir) { 'spec/snapshots' }
+      let(:snapshot_name) do
+        'any_sub_folder/any_sub_sub_folder/descriptive_snapshot_name'
+      end
       let(:fixed_snapshot_path) do
         "#{fixed_snapshot_dir}/#{snapshot_name}.snap"
       end
@@ -51,7 +54,9 @@ describe RSpec::Snapshot::FileOperator do
 
       it 'creates the snapshot directory if needed' do
         expect(FileUtils).to(
-          have_received(:mkdir_p).with(fixed_snapshot_dir)
+          have_received(:mkdir_p).with(
+            "#{fixed_snapshot_dir}/any_sub_folder/any_sub_sub_folder"
+          )
         )
       end
 
