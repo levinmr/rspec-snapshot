@@ -48,7 +48,7 @@ module RSpec
         end
 
         def description
-          "to match a snapshot containing: \"#{@expected}\""
+          "to match a snapshot: '#{@file_operator.snapshot_path}'"
         end
 
         def diffable?

@@ -79,17 +79,17 @@ describe RSpec::Snapshot::Matchers::MatchSnapshot do
   end
 
   describe '.description' do
-    subject { described_class.new(nil, nil) }
+    subject { described_class.new(nil, file_operator) }
 
-    let(:expected) { 'snapshot value' }
+    let(:snapshot_path) { 'path/to/snapshot.snap' }
 
     before do
-      subject.instance_variable_set(:@expected, expected)
+      allow(file_operator).to receive(:snapshot_path).and_return(snapshot_path)
     end
 
-    it 'returns a description of the expected value' do
+    it 'returns a description which includes the path to the snapshot' do
       expect(subject.description).to(
-        eq("to match a snapshot containing: \"#{expected}\"")
+        eq("to match a snapshot: '#{snapshot_path}'")
       )
     end
   end
