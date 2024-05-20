@@ -6,6 +6,8 @@ module RSpec
   module Snapshot
     # Handles File IO for snapshots
     class FileOperator
+      attr_reader :snapshot_path
+
       # Initializes the class instance, and creates the snapshot directory for
       # the current test if needed.
       #
