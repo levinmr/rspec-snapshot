@@ -68,8 +68,10 @@ module RSpec
 
       private def file_does_not_exist?
         return false if File.exist?(@snapshot_path)
-        if ENV.fetch('RAISE_ON_SNAPSHOT_CREATE', 'false') == 'true'
-          raise "Snapshot file does not exist #{@snapshot_path}, set to raise when missing"
+
+        if ENV.fetch('RAISE_ON_SNAPSHOT_CREATE', nil) == 'true'
+          raise "Snapshot file does not exist #{@snapshot_path}, " \
+                'set to raise when missing'
         end
         true
       end
