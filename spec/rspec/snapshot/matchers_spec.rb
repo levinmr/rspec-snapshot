@@ -393,6 +393,82 @@ describe RSpec::Snapshot::Matchers do
       end
     end
 
+    context 'when RAISE_ON_SNAPSHOT_CREATE environment variable is set' do
+      before do
+        allow(ENV).to receive(:fetch).and_call_original
+        allow(ENV).to receive(:fetch).with('RAISE_ON_SNAPSHOT_CREATE',
+                                           nil).and_return('true')
+      end
+
+      context 'and a snapshot file exists' do
+        let(:original_snapshot_value) { 'foo' }
+        let(:updated_snapshot_value) { 'bar' }
+        let(:snapshot_name) { 'update_existing_snapshot' }
+        let(:snapshot_path) do
+          current_directory_path.join('__snapshots__',
+                                      "#{snapshot_name}.snap")
+        end
+
+        before do
+          allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
+                                             nil).and_return(true)
+        end
+
+        let!(:actual) do
+          file = File.new(snapshot_path, 'w+')
+          file.write(original_snapshot_value)
+          file.close
+
+          expect(updated_snapshot_value).to match_snapshot(snapshot_name)
+
+          file = File.new(snapshot_path)
+          actual = file.read
+          file.close
+          actual
+        end
+
+        it 'does not throw and updates' do
+          expect(actual).to eq(updated_snapshot_value)
+        end
+      end
+
+      context 'and a snapshot file does not exist' do
+        let(:snapshot_value) { 'foo' }
+        let(:snapshot_name) { 'update_non_existing_snapshot' }
+        let(:snapshot_path) do
+          current_directory_path.join('__snapshots__',
+                                      "#{snapshot_name}.snap")
+        end
+
+        before do
+          file = instance_double(File)
+
+          allow(File).to receive(:new).and_return(file)
+          allow(file).to receive(:write)
+          allow(file).to receive(:close)
+        end
+
+        let(:actual) do
+          FileUtils.rm_f(snapshot_path)
+
+          expect(snapshot_value).to match_snapshot(snapshot_name)
+
+          file = File.new(snapshot_path)
+          actual = file.read
+          file.close
+          actual
+        end
+
+        it 'writes the snapshot with the current value' do
+          expect { actual }.to raise_error(
+            RuntimeError,
+            a_string_including("Snapshot file does not exist")
+          )
+          expect(File).not_to have_received(:new).with(snapshot_path, 'w+')
+        end
+      end
+    end
+
     context 'when UPDATE_SNAPSHOTS environment variable is not set' do
       before do
         allow(ENV).to receive(:fetch).and_call_original
