@@ -1,4 +1,4 @@
-require:
+plugins:
   - rubocop-rake
   - rubocop-rspec
 
@@ -45,8 +45,6 @@ RSpec/ExampleLength:
   Max: 10
 RSpec/ExpectInHook:
   Enabled: true
-RSpec/FilePath:
-  Enabled: true
 RSpec/InstanceVariable:
   Enabled: true
 RSpec/LeakyConstantDeclaration:
@@ -64,6 +62,10 @@ RSpec/NamedSubject:
 RSpec/NestedGroups:
   Max: 6
 RSpec/ScatteredSetup:
+  Enabled: true
+RSpec/SpecFilePathFormat:
+  Enabled: true
+RSpec/SpecFilePathSuffix:
   Enabled: true
 RSpec/SubjectStub:
   Enabled: true
