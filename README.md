@@ -92,11 +92,24 @@ Global configurations for rspec-snapshot are optional. Details below:
 ```ruby
 RSpec.configure do |config|
   # The default setting is `:relative`, which means snapshot files will be
-  # created in a '__snapshots__' directory adjacent to the spec file where the
-  # matcher is used.
+  # created in a location adjacent to the spec file where the matcher is used.
+  #
+  # The specific location is determined by `config.snapshot_relative_subdir`,
+  # which defaults to `'__snapshots__'`.
   #
   # Set this value to put all snapshots in a fixed directory
   config.snapshot_dir = "spec/fixtures/snapshots"
+
+  # By default, using the default `:relative` option for `snapshot_dir` means
+  # that the snapshots are stored in an adjacent `__snapshots__` subdirectory.
+  #
+  # In all cases, you can still store the snapshot files in a subdirectory by
+  # calling the matcher with a nested snapshot name, eg "nested/snapshot/name".
+  #
+  # Set this value to change the subdirectory where snapshots are stored,
+  # relative to the spec file where the matcher is used.
+  config.snapshot_relative_subdir = "assets/snapshots" # supports nested paths
+  config.snapshot_relative_subdir = nil # stores snapshot files with spec file
 
   # Defaults to using the awesome_print gem to serialize values for snapshots
   #

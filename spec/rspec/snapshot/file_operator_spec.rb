@@ -7,8 +7,12 @@ describe RSpec::Snapshot::FileOperator do
   subject { described_class.new(snapshot_name, metadata) }
 
   let(:snapshot_name) { 'descriptive_snapshot_name' }
-  let(:metadata) { { file_path: 'spec/example_spec.rb' } }
-  let(:relative_snapshot_path) { "spec/__snapshots__/#{snapshot_name}.snap" }
+  let(:metadata) do
+    { file_path: 'spec/some/feature/example_spec.rb' }
+  end
+  let(:relative_snapshot_path) do
+    "spec/some/feature/__snapshots__/#{snapshot_name}.snap"
+  end
 
   before do
     allow(FileUtils).to receive(:mkdir_p).and_return(nil)
@@ -16,16 +20,16 @@ describe RSpec::Snapshot::FileOperator do
 
   describe '#initialize' do
     context 'when RSpec is configured with :relative snapshot directory' do
-      let(:relative_snapshot_dir) { 'spec/__snapshots__' }
+      let(:relative_snapshot_dir) { 'spec/some/feature/__snapshots__' }
 
       before do
         allow(RSpec.configuration).to(
           receive(:snapshot_dir).and_return(:relative)
         )
-        subject
       end
 
       it 'creates the snapshot directory if needed' do
+        subject
         expect(FileUtils).to have_received(:mkdir_p).with(relative_snapshot_dir)
       end
 
@@ -33,6 +37,45 @@ describe RSpec::Snapshot::FileOperator do
         expect(subject.instance_variable_get('@snapshot_path')).to(
           eq(relative_snapshot_path)
         )
+      end
+
+      context 'and also configured with a relative snapshot subdirectory' do
+        before do
+          allow(RSpec.configuration).to(
+            receive(:snapshot_relative_subdir)
+          ).and_return(snapshot_relative_subdir)
+        end
+
+        context 'with snapshot_relative_subdir: nil' do
+          let(:snapshot_relative_subdir) { nil }
+
+          it 'creates the snapshot directory if needed' do
+            subject
+            expect(FileUtils).to have_received(:mkdir_p).with('spec/some/feature')
+          end
+
+          it 'sets the snapshot_path instance variable to the relative path' do
+            expect(subject.instance_variable_get('@snapshot_path')).to(
+              eq("spec/some/feature/#{snapshot_name}.snap")
+            )
+          end
+        end
+
+        context 'with snapshot_relative_subdir: "with/nested/subdirectory"' do
+          let(:snapshot_relative_subdir) { 'with/nested/subdirectory' }
+
+          it 'creates the snapshot directory if needed' do
+            subject
+            expect(FileUtils).to have_received(:mkdir_p)
+              .with('spec/some/feature/with/nested/subdirectory')
+          end
+
+          it 'sets the snapshot_path instance variable to the relative path' do
+            expect(subject.instance_variable_get('@snapshot_path')).to eq(
+              "spec/some/feature/with/nested/subdirectory/#{snapshot_name}.snap"
+            )
+          end
+        end
       end
     end
 
