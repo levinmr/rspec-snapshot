@@ -6,6 +6,7 @@ module RSpec
     class Configuration
       def self.initialize_configuration(config)
         config.add_setting :snapshot_dir, default: :relative
+        config.add_setting :snapshot_relative_subdir, default: '__snapshots__'
 
         config.add_setting :snapshot_serializer, default: nil
       end
