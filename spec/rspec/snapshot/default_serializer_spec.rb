@@ -15,11 +15,11 @@ describe RSpec::Snapshot::DefaultSerializer do
       subject.dump(object_param)
     end
 
-    it 'calls .ai on the object to serialize with awesome_print' do
+    it 'calls .ai on the object to serialize with amazing_print' do
       expect(object_param).to have_received(:ai).with(plain: true, indent: 2)
     end
 
-    it 'returns the result from awesome_print' do
+    it 'returns the result from amazing_print' do
       expect(actual).to be(expected)
     end
   end

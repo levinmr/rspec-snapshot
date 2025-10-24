@@ -94,7 +94,7 @@ describe RSpec::Snapshot::FileOperator do
     end
 
     it 'returns the file contents' do
-      expect(actual).to be(expected)
+      expect(actual).to eq(expected)
     end
   end
 
