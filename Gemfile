@@ -4,11 +4,12 @@ source 'https://rubygems.org'
 gemspec
 
 # Development dependencies
-gem 'bundler', '~> 2.3'
+gem 'bundler', '~> 4.0'
 gem 'byebug'
+gem 'logger' # Required for Ruby 4.0+ (no longer in stdlib)
 gem 'pry-byebug'
 gem 'rake', '~> 13.0'
-gem 'rubocop', '~> 1.59'
-gem 'rubocop-rake', '~> 0.6.0'
-gem 'rubocop-rspec', '~> 2.16'
+gem 'rubocop', '~> 1.86'
+gem 'rubocop-rake', '~> 0.6'
+gem 'rubocop-rspec', '~> 3.0'
 gem 'simplecov'
