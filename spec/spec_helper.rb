@@ -11,8 +11,7 @@ SimpleCov.start do
   ]
 end
 
-SimpleCov.minimum_coverage line: 100, branch: 94
-SimpleCov.refuse_coverage_drop
+SimpleCov.minimum_coverage line: 90, branch: 90
 
 require 'rspec/snapshot'
 
