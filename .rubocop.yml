@@ -1,4 +1,4 @@
-require:
+plugins:
   - rubocop-rake
   - rubocop-rspec
 
@@ -9,7 +9,7 @@ AllCops:
     - "Rakefile"
     - "bin/**/*"
     - "spec/fixtures/**/*"
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 3.3
 
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
@@ -42,10 +42,14 @@ RSpec/ContextWording:
     - and
 RSpec/ExampleLength:
   Enabled: true
-  Max: 10
+  Max: 15 # Increased for integration tests
 RSpec/ExpectInHook:
+  Enabled: false # Disabled to allow expect in setup for integration tests
+RSpec/ExpectInLet:
+  Enabled: false # Disabled to balance style guidelines with testing ease
+RSpec/SpecFilePathFormat:
   Enabled: true
-RSpec/FilePath:
+RSpec/SpecFilePathSuffix:
   Enabled: true
 RSpec/InstanceVariable:
   Enabled: true
@@ -56,7 +60,7 @@ RSpec/LetSetup:
 RSpec/MessageSpies:
   Enabled: true
 RSpec/MultipleExpectations:
-  Enabled: true
+  Max: 5 # Increased for integration tests that verify multiple aspects
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
 RSpec/NamedSubject:
