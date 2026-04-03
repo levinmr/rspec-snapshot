@@ -8,6 +8,11 @@ module RSpec
         config.add_setting :snapshot_dir, default: :relative
 
         config.add_setting :snapshot_serializer, default: nil
+
+        # Hash syntax style for serialized output
+        # :classic uses hash rockets (:foo => value) for backward compatibility
+        # :modern uses Ruby 2.0+ syntax (foo: value)
+        config.add_setting :snapshot_hash_syntax, default: :classic
       end
     end
 
