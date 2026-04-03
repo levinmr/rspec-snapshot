@@ -198,24 +198,19 @@ describe RSpec::Snapshot::Matchers do
                                         "#{snapshot_name}.snap")
           end
 
-          let!(:actual) do
+          it 'creates a file in the configured directory with expected value' do
             RSpec.configure do |config|
               config.snapshot_dir = 'spec/fixtures/snapshots'
             end
 
             expect(expected).to match_snapshot(snapshot_name)
 
+            expect(File.exist?(snapshot_path)).to be(true)
+
             file = File.new(snapshot_path)
             actual = file.read
             file.close
-            actual
-          end
 
-          it 'creates a file in the configured directory' do
-            expect(File.exist?(snapshot_path)).to be(true)
-          end
-
-          it 'the file contents are the expected value' do
             expect(actual).to eq(expected)
           end
         end
@@ -237,7 +232,7 @@ describe RSpec::Snapshot::Matchers do
                                         "#{snapshot_name}.snap")
           end
 
-          let!(:actual) do
+          it 'creates the file and directory with expected contents' do
             RSpec.configure do |config|
               config.snapshot_dir = 'spec/fixtures/non_existing_snapshots_dir'
             end
@@ -247,17 +242,12 @@ describe RSpec::Snapshot::Matchers do
 
             expect(expected).to match_snapshot(snapshot_name)
 
+            expect(File.exist?(snapshot_path)).to be(true)
+
             file = File.new(snapshot_path)
             actual = file.read
             file.close
-            actual
-          end
 
-          it 'creates the file and directory for the configured path' do
-            expect(File.exist?(snapshot_path)).to be(true)
-          end
-
-          it 'the file contents are the expected value' do
             expect(actual).to eq(expected)
           end
         end
@@ -271,24 +261,19 @@ describe RSpec::Snapshot::Matchers do
                                       "#{snapshot_name}.snap")
         end
 
-        let!(:actual) do
+        it 'creates a file in the adjacent directory with expected value' do
           RSpec.configure do |config|
             config.snapshot_dir = :relative
           end
 
           expect(expected).to match_snapshot(snapshot_name)
 
+          expect(File.exist?(snapshot_path)).to be(true)
+
           file = File.new(snapshot_path)
           actual = file.read
           file.close
-          actual
-        end
 
-        it 'creates a file in the adjecent directory with the snapshot name' do
-          expect(File.exist?(snapshot_path)).to be(true)
-        end
-
-        it 'the file contents are the expected value' do
           expect(actual).to eq(expected)
         end
       end
@@ -350,7 +335,7 @@ describe RSpec::Snapshot::Matchers do
                                       "#{snapshot_name}.snap")
         end
 
-        let!(:actual) do
+        it 'ignores the snapshot and updates it to the current value' do
           file = File.new(snapshot_path, 'w+')
           file.write(original_snapshot_value)
           file.close
@@ -360,10 +345,7 @@ describe RSpec::Snapshot::Matchers do
           file = File.new(snapshot_path)
           actual = file.read
           file.close
-          actual
-        end
 
-        it 'ignores the snapshot and updates it to the current value' do
           expect(actual).to eq(updated_snapshot_value)
         end
       end
@@ -376,7 +358,7 @@ describe RSpec::Snapshot::Matchers do
                                       "#{snapshot_name}.snap")
         end
 
-        let!(:actual) do
+        it 'writes the snapshot with the current value' do
           FileUtils.rm_f(snapshot_path)
 
           expect(snapshot_value).to match_snapshot(snapshot_name)
@@ -384,10 +366,7 @@ describe RSpec::Snapshot::Matchers do
           file = File.new(snapshot_path)
           actual = file.read
           file.close
-          actual
-        end
 
-        it 'writes the snapshot with the current value' do
           expect(actual).to eq(snapshot_value)
         end
       end
@@ -409,7 +388,7 @@ describe RSpec::Snapshot::Matchers do
                                       "#{snapshot_name}.snap")
         end
 
-        let!(:actual) do
+        it 'does not update the snapshot to the current value' do
           file = File.new(snapshot_path, 'w+')
           file.write(original_snapshot_value)
           file.close
@@ -419,10 +398,7 @@ describe RSpec::Snapshot::Matchers do
           file = File.new(snapshot_path)
           actual = file.read
           file.close
-          actual
-        end
 
-        it 'does not update the snapshot to the current value' do
           expect(actual).to eq(original_snapshot_value)
         end
       end
@@ -435,7 +411,7 @@ describe RSpec::Snapshot::Matchers do
                                       "#{snapshot_name}.snap")
         end
 
-        let!(:actual) do
+        it 'writes the snapshot with the current value' do
           FileUtils.rm_f(snapshot_path)
 
           expect(snapshot_value).to match_snapshot(snapshot_name)
@@ -443,10 +419,7 @@ describe RSpec::Snapshot::Matchers do
           file = File.new(snapshot_path)
           actual = file.read
           file.close
-          actual
-        end
 
-        it 'writes the snapshot with the current value' do
           expect(actual).to eq(snapshot_value)
         end
       end
@@ -563,7 +536,7 @@ describe RSpec::Snapshot::Matchers do
                                       "#{snapshot_name}.snap")
         end
 
-        let!(:actual) do
+        it 'displays an error with the diff' do
           file = File.new(snapshot_path, 'w+')
           file.write(serialized_value)
           file.close
@@ -571,8 +544,8 @@ describe RSpec::Snapshot::Matchers do
           allow(ENV).to receive(:fetch).and_call_original
           allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
                                              nil).and_return(nil)
-          message = nil
 
+          message = nil
           begin
             expect(param).to match_snapshot(snapshot_name)
           # rubocop:disable Lint/RescueException
@@ -580,11 +553,8 @@ describe RSpec::Snapshot::Matchers do
             message = e.message
           end
           # rubocop:enable Lint/RescueException
-          message
-        end
 
-        it 'displays an error with the diff' do
-          expect(actual).to match_snapshot('diff_snapshot')
+          expect(message).to match_snapshot('diff_snapshot')
         end
       end
 
@@ -597,7 +567,7 @@ describe RSpec::Snapshot::Matchers do
                                       "#{snapshot_name}.snap")
         end
 
-        let!(:actual) do
+        it 'displays the failure message' do
           file = File.new(snapshot_path, 'w+')
           file.write(snapshot_value)
           file.close
@@ -605,8 +575,8 @@ describe RSpec::Snapshot::Matchers do
           allow(ENV).to receive(:fetch).and_call_original
           allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
                                              nil).and_return(nil)
-          message = nil
 
+          message = nil
           begin
             expect(param).to match_snapshot(snapshot_name)
           # rubocop:disable Lint/RescueException
@@ -614,11 +584,8 @@ describe RSpec::Snapshot::Matchers do
             message = e.message
           end
           # rubocop:enable Lint/RescueException
-          message
-        end
 
-        it 'displays the failure message' do
-          expect(actual).to match_snapshot('failure_message_snapshot')
+          expect(message).to match_snapshot('failure_message_snapshot')
         end
       end
 
@@ -631,7 +598,7 @@ describe RSpec::Snapshot::Matchers do
                                       "#{snapshot_name}.snap")
         end
 
-        let!(:actual) do
+        it 'displays the negated failure message' do
           file = File.new(snapshot_path, 'w+')
           file.write(snapshot_value)
           file.close
@@ -639,8 +606,8 @@ describe RSpec::Snapshot::Matchers do
           allow(ENV).to receive(:fetch).and_call_original
           allow(ENV).to receive(:fetch).with('UPDATE_SNAPSHOTS',
                                              nil).and_return(nil)
-          message = nil
 
+          message = nil
           begin
             expect(param).not_to match_snapshot(snapshot_name)
           # rubocop:disable Lint/RescueException
@@ -648,11 +615,8 @@ describe RSpec::Snapshot::Matchers do
             message = e.message
           end
           # rubocop:enable Lint/RescueException
-          message
-        end
 
-        it 'displays the negated failure message' do
-          expect(actual).to match_snapshot('negated_failure_message_snapshot')
+          expect(message).to match_snapshot('negated_failure_message_snapshot')
         end
       end
     end
