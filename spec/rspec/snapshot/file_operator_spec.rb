@@ -114,23 +114,45 @@ describe RSpec::Snapshot::FileOperator do
     context 'when the snapshot does not exist' do
       before do
         allow(File).to receive(:exist?).and_return(false)
-        subject.write(value)
       end
 
-      it 'checks for file existence' do
-        expect(File).to have_received(:exist?).with(relative_snapshot_path)
+      context 'RAISE_ON_SNAPSHOT_CREATE env var is not set' do
+        before do
+          subject.write(value)
+        end
+
+        it 'checks for file existence' do
+          expect(File).to have_received(:exist?).with(relative_snapshot_path)
+        end
+
+        it 'creates a new file instance' do
+          expect(File).to have_received(:new).with(relative_snapshot_path, 'w+')
+        end
+
+        it 'writes the value to the file' do
+          expect(file).to have_received(:write).with(value)
+        end
+
+        it 'closes the file' do
+          expect(file).to have_received(:close)
+        end
       end
 
-      it 'creates a new file instance' do
-        expect(File).to have_received(:new).with(relative_snapshot_path, 'w+')
-      end
+      context 'and the RAISE_ON_SNAPSHOT_CREATE env var is set' do
+        before do
+          allow(ENV).to receive(:fetch).and_call_original
+          
+          allow(ENV).to receive(:fetch).with('RAISE_ON_SNAPSHOT_CREATE', nil)
+            .and_return('true')
+        end
 
-      it 'writes the value to the file' do
-        expect(file).to have_received(:write).with(value)
-      end
-
-      it 'closes the file' do
-        expect(file).to have_received(:close)
+        it 'raises an error' do
+          expect { subject.write(value) }.to raise_error(
+            RuntimeError,
+            "Snapshot file does not exist #{relative_snapshot_path}, set to raise when missing"
+          )
+          expect(File).not_to have_received(:new).with(relative_snapshot_path, 'w+')
+        end
       end
     end
 
