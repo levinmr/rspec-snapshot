@@ -21,7 +21,10 @@ module RSpec
 
       private def snapshot_dir(metadata)
         if RSpec.configuration.snapshot_dir == :relative
-          File.dirname(metadata[:file_path]) << '/__snapshots__'
+          [
+            File.dirname(metadata[:file_path]),
+            RSpec.configuration.snapshot_relative_subdir
+          ].compact.join('/')
         else
           RSpec.configuration.snapshot_dir
         end
